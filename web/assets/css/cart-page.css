@@ -1,0 +1,153 @@
+/* ======================================= */
+/* CSS FOR CART PAGE
+/* ======================================= */
+
+.cart-container {
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+.cart-page-title {
+    font-weight: 700;
+    color: var(--bs-primary);
+    border-bottom: 2px solid var(--bs-primary);
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+/* Left Column: Cart Items */
+.cart-items-wrapper {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.cart-item {
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.cart-item-img {
+    max-height: 80px;
+    width: auto;
+    border-radius: 5px;
+}
+
+.cart-item-title {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.cart-item-options {
+    font-size: 0.85rem;
+}
+
+.cart-item-price {
+    font-weight: 600;
+    color: var(--bs-primary);
+}
+
+/* Quantity input - reuse styles but smaller */
+.cart-quantity {
+    max-width: 120px;
+}
+.cart-quantity .btn-qty {
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+    padding: 0;
+}
+.cart-quantity .qty-input {
+    width: 40px;
+    height: 30px;
+    font-size: 0.9rem;
+    padding: 0;
+    border: 1px solid #ced4da;
+    border-left: none;
+    border-right: none;
+    text-align: center;
+    font-weight: 600;
+}
+.cart-quantity .qty-input:focus {
+    outline: none;
+}
+
+
+.btn-remove-item {
+    color: #dc3545;
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    padding: 5px;
+}
+.btn-remove-item:hover {
+    color: #a01a26;
+}
+
+.free-shipping-info {
+    background-color: #e7f3ff;
+    color: var(--bs-primary);
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+.free-shipping-info i {
+    margin-right: 8px;
+}
+
+/* Right Column: Summary */
+.summary-wrapper {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 25px;
+    position: sticky; /* Make it sticky */
+    top: 100px; /* Adjust based on your sticky header height */
+}
+
+.summary-title {
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+}
+
+.summary-total .total-amount {
+    font-size: 1.5rem;
+    color: #dc3545; /* Red for total */
+}
+
+/* VAT Invoice Styles */
+.vat-invoice-section {
+    border-top: 1px dashed #ccc;
+    padding-top: 1.5rem;
+    margin-top: 1.5rem;
+}
+.vat-form .form-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+.vat-form .form-label small {
+    color: #dc3545; /* Red note */
+    font-weight: normal;
+}
+.vat-form .form-control-sm {
+    font-size: 0.9rem;
+}
+.vat-note {
+    font-style: italic;
+    line-height: 1.4;
+}
+
+/* Checkout Button */
+.btn-checkout {
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 12px;
+}

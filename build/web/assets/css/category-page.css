@@ -1,0 +1,217 @@
+/* ======================================= */
+/* CSS TRANG DANH MỤC SẢN PHẨM
+/* ======================================= */
+
+/* Breadcrumbs */
+.breadcrumb a {
+    text-decoration: none;
+    color: var(--bs-primary);
+}
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+.breadcrumb-item.active {
+    color: #6c757d;
+}
+
+/* Sidebar bộ lọc */
+.filter-sidebar {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.filter-title {
+    font-weight: 700;
+    color: var(--bs-primary);
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--bs-primary);
+    padding-bottom: 10px;
+}
+
+.filter-section {
+    margin-bottom: 1.5rem;
+}
+.filter-section h6 {
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+}
+.filter-list .form-check {
+    margin-bottom: 0.5rem;
+}
+.filter-list .form-check-label {
+    cursor: pointer;
+}
+
+/* Banner danh mục */
+.category-banner {
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Tiêu đề danh mục */
+.category-title {
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+/* Nút sắp xếp */
+.sorting-options {
+    background-color: #f8f9fa;
+    padding: 10px 15px;
+    border-radius: 8px;
+    gap: 10px;
+    flex-wrap: wrap; /* Cho phép xuống dòng trên mobile */
+}
+.sorting-options span {
+    font-weight: 500;
+}
+.btn-sort {
+    font-size: 0.9rem;
+    border: none;
+    background: none;
+    color: #333;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+.btn-sort:hover {
+    background-color: #e9ecef;
+}
+.btn-sort.active {
+    background-color: var(--bs-primary);
+    color: #fff;
+}
+
+/* Dùng lại CSS card sản phẩm từ style.css (không cần thêm mới) */
+/* .product-card-special { ... } */
+
+/* Phân trang */
+.pagination .page-link {
+    color: var(--bs-primary);
+}
+.pagination .page-item.active .page-link {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: #fff;
+}
+
+.category-container, .filter-sidebar, .sorting-options {
+    font-family: "Be Vietnam Pro", sans-serif !important;
+}
+
+/* Breadcrumbs */
+.breadcrumb a {
+    text-decoration: none;
+    color: var(--bs-primary);
+}
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+.breadcrumb-item.active {
+    color: #6c757d;
+}
+
+/* Sidebar bộ lọc */
+.filter-sidebar {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 100px;
+}
+
+.filter-title {
+    font-weight: 700;
+    color: var(--bs-primary);
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--bs-primary);
+    padding-bottom: 10px;
+}
+
+.filter-section {
+    margin-bottom: 1.5rem;
+}
+.filter-section h6 {
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+}
+.filter-list .form-check {
+    margin-bottom: 0.5rem;
+}
+.filter-list .form-check-label {
+    cursor: pointer;
+}
+
+/* Bộ lọc màu sắc */
+.color-dot {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px #ccc;
+    transition: all 0.2s ease;
+}
+.color-dot:hover {
+    transform: scale(1.1);
+}
+.color-dot.active {
+    box-shadow: 0 0 0 2px var(--bs-primary);
+}
+
+/* Banner danh mục */
+.category-banner {
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Tiêu đề danh mục */
+.category-title {
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+/* Nút sắp xếp */
+.sorting-options {
+    background-color: #f8f9fa;
+    padding: 10px 15px;
+    border-radius: 8px;
+    gap: 10px;
+    flex-wrap: wrap; 
+}
+.sorting-options span {
+    font-weight: 500;
+}
+.btn-sort {
+    font-size: 0.9rem;
+    border: none;
+    background: none;
+    color: #333;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+.btn-sort:hover {
+    background-color: #e9ecef;
+}
+.btn-sort.active {
+    background-color: var(--bs-primary);
+    color: #fff;
+}
+
+/* Phân trang */
+.pagination .page-link {
+    color: var(--bs-primary);
+}
+.pagination .page-item.active .page-link {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: #fff;
+}

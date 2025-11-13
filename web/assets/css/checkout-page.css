@@ -1,0 +1,238 @@
+.checkout-container {
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+/* Breadcrumbs */
+.breadcrumb a {
+    text-decoration: none;
+    color: var(--bs-primary);
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb-item.active {
+    color: #212529; /* Darker for current step */
+    font-weight: 500;
+}
+
+.disabled-breadcrumb {
+    color: #adb5bd; /* Lighter grey for future steps */
+    pointer-events: none;
+}
+
+/* Left Column: Shipping Form */
+.shipping-info-wrapper {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.login-prompt {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+.login-prompt a {
+    color: var(--bs-primary);
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.login-prompt a:hover {
+    text-decoration: underline;
+}
+
+.shipping-info-wrapper .form-control,
+.shipping-info-wrapper .form-select {
+    padding: 0.75rem 1rem; /* Increase padding */
+    font-size: 0.95rem;
+}
+
+.back-link {
+    color: var(--bs-primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.btn-continue {
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+}
+
+/* Right Column: Order Summary */
+.order-summary-wrapper {
+    background-color: #f8f9fa; /* Light grey background */
+    padding: 25px;
+    border-radius: 10px;
+    border: 1px solid #dee2e6;
+    position: sticky; /* Make it sticky */
+    top: 100px; /* Adjust as needed */
+}
+
+.summary-item-img {
+    position: relative;
+    width: 60px; /* Fixed width */
+    height: 60px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.summary-item-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.summary-item-qty {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.summary-item-title {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.summary-item-options {
+    font-size: 0.8rem !important;
+}
+
+.summary-item-price {
+    font-size: 0.9rem;
+}
+
+/* Discount Section */
+.discount-section .form-control {
+    border-right: none;
+}
+
+.discount-section .btn-outline-primary {
+    border-left: 1px solid #dee2e6;
+}
+
+.discount-section .btn-outline-primary:hover {
+    background-color: var(--bs-primary);
+    color: white;
+}
+
+.show-discounts-link {
+    text-decoration: none;
+    color: var(--bs-primary);
+    font-weight: 500;
+}
+
+.show-discounts-link:hover {
+     text-decoration: underline;
+}
+
+.discount-tags {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    animation: fadeIn 0.3s ease; /* Fade in effect */
+}
+
+.btn-discount-tag {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px dashed #ef9a9a;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.btn-discount-tag:hover {
+    background-color: #ffcdd2;
+}
+
+/* Totals Section */
+.totals-section span {
+    font-size: 0.95rem;
+}
+
+.grand-total {
+    color: var(--bs-primary);
+}
+
+/* Customer Program */
+.customer-program {
+    font-size: 0.9rem;
+    border-top: 1px solid #eee;
+    padding-top: 1rem;
+}
+
+/* General hr */
+hr {
+    border-top: 1px solid #e0e0e0;
+}
+
+.qr-payment-wrapper {
+    padding: 0;
+    animation: fadeIn 0.5s ease; 
+}
+
+/* Căn chỉnh canvas QR */
+.qrcode-canvas {
+    width: 200px; 
+    height: 200px;
+    border: 5px solid #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.payment-details p {
+    margin-bottom: 0.5rem;
+}
+
+.payment-details strong {
+    color: #333;
+}
+
+#qrPaymentModal .modal-header {
+    background-color: var(--bs-primary);
+    color: white;
+}
+
+#qrPaymentModal .modal-title {
+    font-weight: 600;
+}
+
+#qrPaymentModal .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+.qr-payment-wrapper img {
+    border: 2px solid #eee;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.qr-payment-wrapper p {
+    margin-bottom: 4px;
+    font-size: 14px;
+}

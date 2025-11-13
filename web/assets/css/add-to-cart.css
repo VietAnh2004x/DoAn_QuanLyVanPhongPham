@@ -1,0 +1,29 @@
+/* ============================= */
+/* CSS HIỂN THỊ THÔNG BÁO TOAST */
+/* ============================= */
+
+.toast-msg {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: #198754;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    font-weight: 500;
+    animation: fadeInOut 1.8s ease;
+    z-index: 1050;
+}
+
+.toast-error {
+    background: #dc3545; /* màu đỏ lỗi */
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateY(20px); }
+    10% { opacity: 1; transform: translateY(0); }
+    90% { opacity: 1; }
+    100% { opacity: 0; transform: translateY(20px); }
+}
+
