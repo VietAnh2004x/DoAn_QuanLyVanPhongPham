@@ -5,7 +5,6 @@ import java.util.Date;
 public class DonHang {
     private int donHangId;
     private int khachHangId;
-    private int nhanVienId;
     private String danhSachSanPham;
     private double tongTien;
     private Date ngayDat;
@@ -18,12 +17,11 @@ public class DonHang {
 
     public DonHang() {}
 
-    public DonHang(int donHangId, int khachHangId, int nhanVienId, String danhSachSanPham,
+    public DonHang(int donHangId, int khachHangId, String danhSachSanPham,
                    double tongTien, Date ngayDat, String diaChiGiao,
                    double phiVanChuyen, String trangThai) {
         this.donHangId = donHangId;
         this.khachHangId = khachHangId;
-        this.nhanVienId = nhanVienId;
         this.danhSachSanPham = danhSachSanPham;
         this.tongTien = tongTien;
         this.ngayDat = ngayDat;
@@ -38,8 +36,6 @@ public class DonHang {
     public int getKhachHangId() { return khachHangId; }
     public void setKhachHangId(int khachHangId) { this.khachHangId = khachHangId; }
 
-    public int getNhanVienId() { return nhanVienId; }
-    public void setNhanVienId(int nhanVienId) { this.nhanVienId = nhanVienId; }
 
     public String getDanhSachSanPham() { return danhSachSanPham; }
     public void setDanhSachSanPham(String danhSachSanPham) { this.danhSachSanPham = danhSachSanPham; }

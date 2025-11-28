@@ -76,7 +76,6 @@
             </select>
         </div>
 
-        <!-- Hình ảnh -->
         <div class="mb-3">
             <label class="form-label fw-bold">Hình ảnh sản phẩm</label>
             <input type="file" name="hinhAnhFile" class="form-control" accept="image/*" />
@@ -88,13 +87,12 @@
             </c:if>
         </div>
 
-        <!-- Mô tả -->
+
         <div class="mb-3">
             <label class="form-label fw-bold">Mô tả</label>
             <textarea name="moTa" class="form-control" rows="3">${sp.moTa}</textarea>
         </div>
 
-        <!-- Trạng thái -->
         <div class="mb-3">
             <label class="form-label fw-bold">Trạng thái</label>
             <select name="trangThai" class="form-select">
@@ -106,7 +104,6 @@
                     <c:if test="${sp != null && sp.trangThai == 'Hết hàng'}">selected</c:if>>Hết hàng</option>
             </select>
         </div>
-
         <div class="d-flex justify-content-between mt-4">
             <button type="submit" class="btn btn-success px-4">Lưu</button>
             <a href="${pageContext.request.contextPath}/admin/san-pham" class="btn btn-secondary px-4">Hủy</a>

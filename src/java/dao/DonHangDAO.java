@@ -264,7 +264,6 @@ public class DonHangDAO {
                     list.add(new DonHang(
                             rs.getInt("donHangId"),
                             rs.getInt("khachHangId"),
-                            rs.getInt("nhanVienId"),
                             rs.getString("danhSachSanPham"),
                             rs.getDouble("tongTien"),
                             rs.getDate("ngayDat"),

@@ -13,7 +13,7 @@ public class ThongKeDao {
         String sql = """
             SELECT DATE_FORMAT(ngayDat, '%m/%Y') AS Thang, SUM(tongTien) AS DoanhThu
             FROM DonHang
-            WHERE trangThai IN ('Hoàn tất', 'Đang giao')
+            WHERE trangThai IN ('Hoàn tất')
             GROUP BY Thang
             ORDER BY MIN(ngayDat)
             LIMIT 12
