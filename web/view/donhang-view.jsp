@@ -94,9 +94,11 @@
 
                         <c:forEach var="item" items="${listSanPham}">
                             <tr>
-                                <td class="text-center">${item.SanPhamId}</td>
+                                <td class="text-center">
+                                    <fmt:formatNumber value="${item.SanPhamId}" type="number" maxFractionDigits="0"/>
+                                </td>
                                 <td>${item.TenSanPham}</td>
-                                <td class="text-center">${item.SoLuong}</td>
+                                <td class="text-center"> <fmt:formatNumber value="${item.SoLuong}" type="number" maxFractionDigits="0"/></td>
                                 <td class="text-end">
                                     <fmt:formatNumber value="${item.GiaBan}" type="number" pattern="#,##0 ₫"/>
                                 </td>
