@@ -3,6 +3,20 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/D:/Java/monJavaWeb/DoAn_QuanLyVanPhongPham/src/java/controller/Home.java</file>
+            <file>file:/D:/Java/monJavaWeb/DoAn_QuanLyVanPhongPham/src/java/model/SanPham.java</file>
+            <file>file:/D:/Java/monJavaWeb/DoAn_QuanLyVanPhongPham/src/java/model/LoaiSanPham.java</file>
+            <file>file:/D:/Java/monJavaWeb/DoAn_QuanLyVanPhongPham/src/java/dao/SanPhamDAO.java</file>
+            <file>file:/D:/Java/monJavaWeb/DoAn_QuanLyVanPhongPham/src/java/controller/ChiTietSanPham.java</file>
+            <file>file:/D:/Java/monJavaWeb/DoAn_QuanLyVanPhongPham/web/view/dashboard.jsp</file>
+            <file>file:/D:/Java/monJavaWeb/DoAn_QuanLyVanPhongPham/web/view/chitietsanpham.jsp</file>
+            <file>file:/D:/Java/monJavaWeb/DoAn_QuanLyVanPhongPham/web/view/danhmucsanpham.jsp</file>
+            <file>file:/D:/Java/monJavaWeb/DoAn_QuanLyVanPhongPham/web/view/sanpham-list.jsp</file>
+            <file>file:/D:/Java/monJavaWeb/DoAn_QuanLyVanPhongPham/src/java/controller/ExportDataServlet.java</file>
+            <file>file:/D:/Java/monJavaWeb/DoAn_QuanLyVanPhongPham/web/view/sanpham-form.jsp</file>
+            <file>file:/D:/Java/monJavaWeb/DoAn_QuanLyVanPhongPham/web/view/nguoidung-form.jsp</file>
+            <file>file:/D:/Java/monJavaWeb/DoAn_QuanLyVanPhongPham/web/view/nguoidung-list.jsp</file>
+            <file>file:/D:/Java/monJavaWeb/DoAn_QuanLyVanPhongPham/web/view/donhang-list.jsp</file>
             <file>file:/D:/DoAn_QuanLyVanPhongPham/web/view/admin-layout.jsp</file>
             <file>file:/D:/DoAn_QuanLyVanPhongPham/web/view/dashboard.jsp</file>
             <file>file:/D:/DoAn_QuanLyVanPhongPham/src/java/controller/Home.java</file>
