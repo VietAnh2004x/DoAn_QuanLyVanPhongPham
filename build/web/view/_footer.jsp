@@ -14,22 +14,22 @@
                 </p>
             </div>
             <div class="col-md-2 col-lg-2 col-xl-2 mx-auto">
-                <h6 class="text-uppercase fw-bold mb-4">Chính sách</h6>
-                <p><a href="#!">Chính sách bảo mật</a></p>
-                <p><a href="#!">Chính sách đổi trả</a></p>
-                <p><a href="#!">Chính sách giao hàng</a></p>
+                <h6 class="text-uppercase fw-bold mb-4">Họ và tên</h6>
+                <p><a href="#!">Nguyễn Việt Anh</a></p>
+                <p><a href="#!">Phạm Trần Ngọc Chiến</a></p>
+                <p><a href="#!">Trần Văn Huy</a></p>
             </div>
             <div class="col-md-3 col-lg-2 col-xl-2 mx-auto">
-                <h6 class="text-uppercase fw-bold mb-4">Liên kết</h6>
-                <p><a href="#!">Về chúng tôi</a></p>
-                <p><a href="#!">Cửa hàng</a></p>
-                <p><a href="#!">Hỗ trợ</a></p>
+                <h6 class="text-uppercase fw-bold mb-4">Lớp</h6>
+                <p><a href="#!">DHTI16A1CL</a></p>
+                <p><a href="#!">DHTI16A1CL</a></p>
+                <p><a href="#!">DHTI16A1CL</a></p>
             </div>
             <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0">
-                <h6 class="text-uppercase fw-bold mb-4">Liên hệ</h6>
-                <p><i class="bi bi-geo-alt-fill"></i> Lĩnh Nam - Hà Nội</p>
-                <p><i class="bi bi-envelope-fill"></i> support@3ae.vn</p>
-                <p><i class="bi bi-telephone-fill"></i> 0123 456 789</p>
+                <h6 class="text-uppercase fw-bold mb-4">Email</h6>
+                <p>nvanh.dhti16a1cl@sv.uneti.edu.vn</p>
+                <p>tvhuy.dhti16a1cl@sv.uneti.edu.vn</p>
+                <p>ptnchien.dhti16a1cl@sv.uneti.edu.vn</p>
             </div>
         </div>
     </div>
