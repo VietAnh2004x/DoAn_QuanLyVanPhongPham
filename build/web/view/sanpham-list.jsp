@@ -273,15 +273,12 @@
                         </tbody>
                     </table>
                 </div>
-
                 <c:if test="${empty list}">
                     <div class="alert alert-warning text-center mt-3">
                         Không có sản phẩm nào.
                     </div>
                 </c:if>
-
             </div>
         </div>
-
     </body>
 </html>

@@ -223,9 +223,7 @@
                         Không có đơn hàng nào.
                     </div>
                 </c:if>
-
             </div>
         </div>
-
     </body>
 </html>
