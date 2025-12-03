@@ -3,189 +3,221 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Quản lý người dùng</title>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin | Quản lý người dùng</title>
 
-        <!-- Bootstrap -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: "Inter", system-ui, sans-serif;
+            background: #f3f4f6;
+            color: #1f2937;
+            font-size: 13px;
+        }
 
-        <style>
-            body {
-                background: #f3f4f6;
-                font-family: "Inter", sans-serif;
-            }
+        /* ===== MAIN (KHỚP SIDEBAR 220px) ===== */
+        .main-content {
+            margin-left: 220px;
+            padding: 18px 22px;
+            max-width: calc(100vw - 220px);
+        }
 
-            /* MAIN CONTENT (lệch sidebar) */
-            .main-content {
-                margin-left: 250px;
-                padding: 2rem;
-            }
+        .page-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2563eb;
+        }
 
-            /* TITLE */
-            .page-title {
-                font-size: 26px;
-                font-weight: 700;
-                color: #2563eb;
-            }
+        /* ===== SEARCH ===== */
+        .search-box {
+            background: #fff;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 14px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+        }
 
-            /* SEARCH BOX */
-            .search-box {
-                background: white;
-                padding: 20px;
-                border-radius: 16px;
-                border: 1px solid #e5e7eb;
-                box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-                margin-bottom: 20px;
-            }
+        /* ===== TABLE WRAPPER ===== */
+        .section-wrapper {
+            background: #fff;
+            border-radius: 14px;
+            padding: 14px 16px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.04);
+        }
 
-            .search-box input {
-                border-radius: 10px;
-                border: 1px solid #cbd5e1;
-            }
+        /* ===== TABLE ===== */
+        table {
+            width: 100%;
+            table-layout: fixed;
+            border-collapse: collapse;
+            font-size: 12.5px;
+        }
 
-            .search-box button {
-                border-radius: 10px;
-                background: #2563eb;
-                border: none;
-                padding: 12px 20px;
-                font-weight: 600;
-                color: white;
-            }
-            .search-box button:hover {
-                background: #1d4ed8;
-            }
+        thead th {
+            background: #2563eb;
+            color: #fff;
+            padding: 8px;
+            font-weight: 600;
+            text-align: center;
+            border-right: 1px solid rgba(255,255,255,0.25);
+        }
 
-            /* TABLE */
-            table thead {
-                background: #2563eb;
-                color: white;
-            }
-            table tbody tr:hover {
-                background: #eff6ff;
-            }
+        thead th:last-child {
+            border-right: none;
+        }
 
-            /* BADGES */
-            .badge-admin {
-                background: #fee2e2;
-                color: #b91c1c;
-                padding: 8px 14px;
-                border-radius: 12px;
-                font-weight: 600;
-            }
-            .badge-user {
-                background: #dcfce7;
-                color: #16a34a;
-                padding: 8px 14px;
-                border-radius: 12px;
-                font-weight: 600;
-            }
+        tbody td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #e5e7eb;
+            border-right: 1px solid #e5e7eb;
+            vertical-align: top;
+            line-height: 1.45;
+        }
 
-            /* SECTION WRAPPER */
-            .section-wrapper {
-                background: white;
-                border-radius: 16px;
-                padding: 22px 26px;
-                border: 1px solid #e5e7eb;
-                box-shadow: 0 8px 18px rgba(0,0,0,0.05);
-            }
+        tbody td:last-child {
+            border-right: none;
+        }
 
-        </style>
-    </head>
+        tbody tr:hover {
+            background: #f8fafc;
+        }
 
-    <body>
+        /* ===== TEXT HANDLE ===== */
+        td.email,
+        td.address {
+            white-space: normal;
+            word-break: break-word;
+        }
 
-        <!-- 🌟 GỌI ADMIN LAYOUT -->
-        <jsp:include page="/view/admin-layout.jsp"/>
+        td.center {
+            text-align: center;
+            white-space: nowrap;
+        }
 
-        <!-- 🌟 MAIN CONTENT -->
-        <div class="main-content">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="page-title m-0">
-                    <i class="fas fa-receipt me-2"></i> Danh sách đơn hàng
-                </h2>  
+        /* ===== ROLE ===== */
+        .badge-admin,
+        .badge-user {
+            font-size: 11.5px;
+            padding: 4px 10px;
+            border-radius: 14px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
+        }
 
-                <a href="${pageContext.request.contextPath}/export-excel?type=user" 
-                   class="btn btn-success fw-bold px-3 py-2"
-                   style="border-radius: 10px;">
-                    <i class="fa fa-file-excel-o me-1"></i> Xuất Excel
-                </a>
-            </div>
+        .badge-admin {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
 
+        .badge-user {
+            background: #dcfce7;
+            color: #166534;
+        }
+    </style>
+</head>
 
-            <!-- SEARCH -->
-            <form action="nguoi-dung" method="get" class="search-box">
-                <div class="input-group">
-                    <input type="text" name="keyword" class="form-control form-control-lg"
-                           placeholder="Tìm theo tên, email, SĐT..."
-                           value="${param.keyword}">
+<body>
 
-                    <button type="submit">
-                        <i class="fas fa-search me-1"></i> Tìm
-                    </button>
-                </div>
-            </form>
+<!-- SIDEBAR -->
+<jsp:include page="/view/admin-layout.jsp"/>
 
-            <!-- USER TABLE -->
-            <div class="section-wrapper">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover align-middle">
-                        <thead>
-                            <tr class="text-center text-uppercase">
-                                <th>ID</th>
-                                <th>Họ tên</th>
-                                <th>Email</th>
-                                <th>Điện thoại</th>
-                                <th>Địa chỉ</th>
-                                <th>Ngày đăng ký</th>
-                                <th>Vai trò</th>
-                            </tr>
-                        </thead>
+<!-- MAIN -->
+<div class="main-content">
 
-                        <tbody>
-                            <c:if test="${empty list}">
-                                <tr>
-                                    <td colspan="7" class="text-center text-muted p-4">
-                                        Không tìm thấy người dùng nào.
-                                    </td>
-                                </tr>
-                            </c:if>
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="page-title">
+            <i class="fas fa-users me-2"></i>Quản lý người dùng
+        </h2>
 
-                            <c:forEach var="u" items="${list}">
-                                <tr>
-                                    <td class="text-center fw-bold">${u.nguoiDungId}</td>
-                                    <td>${u.hoTen}</td>
-                                    <td>${u.email}</td>
-                                    <td>${u.soDienThoai}</td>
-                                    <td>${u.diaChi}</td>
-                                    <td class="text-center">
-                                        <fmt:formatDate value="${u.ngayDangKy}" pattern="dd/MM/yyyy"/>
-                                    </td>
+        <a href="${pageContext.request.contextPath}/export-excel?type=user"
+           class="btn btn-success btn-sm fw-bold">
+            <i class="fas fa-file-excel"></i> Xuất Excel
+        </a>
+    </div>
 
-                                    <td class="text-center">
-                                        <c:choose>
-                                            <c:when test="${u.roleId == 1}">
-                                                <span class="badge-admin">
-                                                    <i class="fas fa-user-shield me-1"></i> Admin
-                                                </span>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <span class="badge-user">
-                                                    <i class="fas fa-user me-1"></i> Khách hàng
-                                                </span>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </td>
-                                </tr>
-                            </c:forEach>
-                        </tbody>
-
-                    </table>
-                </div>
-            </div>
+    <!-- SEARCH -->
+    <form action="nguoi-dung" method="get" class="search-box">
+        <div class="input-group input-group-sm">
+            <input type="text"
+                   name="keyword"
+                   class="form-control"
+                   placeholder="Tìm theo tên, email, SĐT..."
+                   value="${param.keyword}">
+            <button class="btn btn-primary">
+                <i class="fas fa-search"></i> Tìm
+            </button>
         </div>
-    </body>
+    </form>
+
+    <!-- TABLE -->
+    <div class="section-wrapper">
+        <div class="table-responsive">
+            <table>
+                <thead>
+                <tr>
+                    <th style="width:50px">ID</th>
+                    <th style="width:150px">Họ tên</th>
+                    <th style="width:210px">Email</th>
+                    <th style="width:115px">Điện thoại</th>
+                    <th>Địa chỉ</th>
+                    <th style="width:105px">Ngày ĐK</th>
+                    <th style="width:95px">Vai trò</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <c:if test="${empty list}">
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-3">
+                            Không có người dùng nào
+                        </td>
+                    </tr>
+                </c:if>
+
+                <c:forEach var="u" items="${list}">
+                    <tr>
+                        <td class="center fw-bold">${u.nguoiDungId}</td>
+                        <td>${u.hoTen}</td>
+                        <td class="email">${u.email}</td>
+                        <td class="center">${u.soDienThoai}</td>
+                        <td class="address">${u.diaChi}</td>
+                        <td class="center">
+                            <fmt:formatDate value="${u.ngayDangKy}" pattern="dd/MM/yyyy"/>
+                        </td>
+                        <td class="center">
+                            <c:choose>
+                                <c:when test="${u.roleId == 1}">
+                                    <span class="badge-admin">
+                                        <i class="fas fa-user-shield"></i> Admin
+                                    </span>
+                                </c:when>
+                                <c:otherwise>
+                                    <span class="badge-user">
+                                        <i class="fas fa-user"></i> Khách
+                                    </span>
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+</body>
 </html>

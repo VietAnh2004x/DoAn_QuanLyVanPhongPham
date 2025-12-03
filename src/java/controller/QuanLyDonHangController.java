@@ -4,19 +4,24 @@ import dao.DonHangDAO;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
+
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import java.lang.reflect.Type;
+
 import model.DonHang;
+import model.NguoiDung;
 
 @WebServlet("/admin/don-hang")
 public class QuanLyDonHangController extends HttpServlet {
 
     private final DonHangDAO dao = new DonHangDAO();
 
+    // ================= GET =================
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -24,104 +29,144 @@ public class QuanLyDonHangController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
 
-        HttpSession session = request.getSession();
-        model.NguoiDung user = (model.NguoiDung) session.getAttribute("authUser");
+        // ✅ CHECK LOGIN + ROLE
+        HttpSession session = request.getSession(false);
+        NguoiDung user = (session != null)
+                ? (NguoiDung) session.getAttribute("authUser")
+                : null;
 
-        // ✅ Kiểm tra quyền admin
         if (user == null || user.getRoleId() != 1) {
             response.sendRedirect(request.getContextPath() + "/dang-nhap");
             return;
         }
 
         String action = request.getParameter("action");
-        if (action == null || action.isEmpty()) action = "list";
+        if (action == null || action.isBlank()) {
+            action = "list";
+        }
 
-        try {
-            switch (action) {
-                // ======= XEM CHI TIẾT ĐƠN HÀNG =======
-                case "view" -> {
-                    int id = Integer.parseInt(request.getParameter("id"));
-                    DonHang dh = dao.getById(id);
+        switch (action) {
+            case "view":
+                handleView(request, response);
+                break;
 
-                    if (dh == null) {
-                        request.setAttribute("error", "Không tìm thấy đơn hàng #" + id);
-                        request.getRequestDispatcher("/view/donhang-list.jsp").forward(request, response);
-                        return;
-                    }
+            case "print":
+                handlePrint(request, response);
+                break;
 
-                    // Parse JSON danh sách sản phẩm
-                    String jsonSanPham = dh.getDanhSachSanPham();
-                    List<Map<String, Object>> listSanPham = null;
-                    if (jsonSanPham != null && !jsonSanPham.trim().isEmpty()) {
-                        try {
-                            Gson gson = new Gson();
-                            Type listType = new TypeToken<List<Map<String, Object>>>() {}.getType();
-                            listSanPham = gson.fromJson(jsonSanPham, listType);
-                        } catch (Exception e) {
-                            System.err.println("[ERROR] ❌ Lỗi parse JSON sản phẩm: " + e.getMessage());
-                        }
-                    }
+            case "list":
+                handleList(request, response);
+                break;
 
-                    request.setAttribute("dh", dh);
-                    request.setAttribute("listSanPham", listSanPham);
-                    request.getRequestDispatcher("/view/donhang-view.jsp").forward(request, response);
-                }
-
-                // ======= DANH SÁCH + TÌM KIẾM =======
-                case "list" -> {
-                    String keyword = request.getParameter("keyword");
-                    List<DonHang> list;
-
-                    if (keyword != null && !keyword.trim().isEmpty()) {
-                        list = dao.search(keyword.trim());
-                        request.setAttribute("keyword", keyword);
-                    } else {
-                        list = dao.getAll();
-                    }
-
-                    request.setAttribute("list", list);
-                    request.getRequestDispatcher("/view/donhang-list.jsp").forward(request, response);
-                }
-
-                // ======= TRƯỜNG HỢP KHÔNG XÁC ĐỊNH =======
-                default -> {
-                    request.setAttribute("error", "Hành động không hợp lệ: " + action);
-                    request.getRequestDispatcher("/view/donhang-list.jsp").forward(request, response);
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("error", "Lỗi khi xử lý yêu cầu: " + e.getMessage());
-            request.getRequestDispatcher("/view/donhang-list.jsp").forward(request, response);
+            default:
+                response.sendError(
+                        HttpServletResponse.SC_BAD_REQUEST,
+                        "Action không hợp lệ: " + action
+                );
         }
     }
 
-    // ======= CẬP NHẬT TRẠNG THÁI =======
+    // ================= CHI TIẾT ĐƠN HÀNG =================
+    private void handleView(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        int id = parseId(request, response);
+        if (id == -1) return;
+
+        DonHang dh = dao.getById(id);
+        if (dh == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND,
+                    "Không tìm thấy đơn hàng ID = " + id);
+            return;
+        }
+
+        List<Map<String, Object>> listSanPham =
+                parseSanPhamJson(dh.getDanhSachSanPham());
+
+        request.setAttribute("dh", dh);
+        request.setAttribute("listSanPham", listSanPham);
+
+        request.getRequestDispatcher("/view/donhang-view.jsp")
+                .forward(request, response);
+    }
+
+    // ================= IN HÓA ĐƠN =================
+    private void handlePrint(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        int id = parseId(request, response);
+        if (id == -1) return;
+
+        DonHang dh = dao.getById(id);
+        if (dh == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND,
+                    "Không tìm thấy đơn hàng ID = " + id);
+            return;
+        }
+
+        List<Map<String, Object>> listSanPham =
+                parseSanPhamJson(dh.getDanhSachSanPham());
+
+        request.setAttribute("dh", dh);
+        request.setAttribute("listSanPham", listSanPham);
+
+        // ✅ chỉ render hoadon.jsp – dùng window.print()
+        request.getRequestDispatcher("/view/hoadon.jsp")
+                .forward(request, response);
+    }
+
+    // ================= DANH SÁCH ĐƠN HÀNG =================
+    private void handleList(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String keyword = request.getParameter("keyword");
+
+        List<DonHang> list =
+                (keyword != null && !keyword.isBlank())
+                        ? dao.search(keyword.trim())
+                        : dao.getAll();
+
+        request.setAttribute("list", list);
+        request.getRequestDispatcher("/view/donhang-list.jsp")
+                .forward(request, response);
+    }
+
+    // ================= PARSE ID =================
+    private int parseId(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+
+        try {
+            return Integer.parseInt(request.getParameter("id"));
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                    "ID đơn hàng không hợp lệ");
+            return -1;
+        }
+    }
+
+    // ================= PARSE JSON SP =================
+    private List<Map<String, Object>> parseSanPhamJson(String json) {
+
+        if (json == null || json.isBlank()) return List.of();
+
+        try {
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<Map<String, Object>>>() {}.getType();
+            return gson.fromJson(json, type);
+        } catch (Exception e) {
+            return List.of();
+        }
+    }
+
+    // ================= POST (CẬP NHẬT TRẠNG THÁI) =================
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
+        int id = Integer.parseInt(request.getParameter("donHangId"));
+        String trangThai = request.getParameter("trangThai");
 
-        try {
-            int id = Integer.parseInt(request.getParameter("donHangId"));
-            String trangThai = request.getParameter("trangThai");
-
-            boolean result = dao.updateTrangThai(id, trangThai);
-            if (result) {
-                System.out.println("✅ [OK] Đơn hàng #" + id + " cập nhật trạng thái → " + trangThai);
-            } else {
-                System.out.println("⚠ [FAIL] Không thể cập nhật đơn hàng #" + id);
-            }
-
-            response.sendRedirect(request.getContextPath() + "/admin/don-hang");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("error", "Lỗi khi cập nhật trạng thái: " + e.getMessage());
-            request.getRequestDispatcher("/view/donhang-list.jsp").forward(request, response);
-        }
+        dao.updateTrangThai(id, trangThai);
+        response.sendRedirect(request.getContextPath() + "/admin/don-hang");
     }
 }

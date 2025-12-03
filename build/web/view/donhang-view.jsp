@@ -1,40 +1,120 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
-<html>
+<!DOCTYPE html>
+<html lang="vi">
 <head>
+    <meta charset="UTF-8">
     <title>Chi tiết đơn hàng #${dh.donHangId}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        body {
+            background: #f3f4f6;
+            font-family: Inter, system-ui, sans-serif;
+            font-size: 14px;
+            color: #1f2937;
+        }
+
+        .main-content {
+            margin-left: 220px;
+            padding: 24px 28px;
+            max-width: calc(100vw - 220px);
+        }
+
+        .page-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        .breadcrumb-custom a {
+            text-decoration: none;
+            font-weight: 600;
+            color: #2563eb;
+        }
+
+        .breadcrumb-custom span {
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        .card-wrapper {
+            border-radius: 16px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 8px 20px rgba(0,0,0,.04);
+        }
+    </style>
 </head>
 
-<body class="bg-light">
-<div class="container mt-5 mb-5">
+<body>
 
-    <!-- Tiêu đề -->
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-primary text-white p-3">
-            <h3 class="mb-0">
+<!-- ✅ SIDEBAR ADMIN -->
+<jsp:include page="/view/admin-layout.jsp"/>
+
+<!-- ✅ MAIN CONTENT -->
+<div class="main-content">
+
+    <!-- ✅ HEADER: BREADCRUMB + BUTTON -->
+    <div class="d-flex justify-content-between align-items-start mb-4">
+
+        <!-- LEFT -->
+        <div>
+            <div class="breadcrumb-custom mb-1">
+                <a href="${pageContext.request.contextPath}/admin/don-hang">
+                    ← Quản lý đơn hàng
+                </a>
+                <span> / Chi tiết đơn hàng #${dh.donHangId}</span>
+            </div>
+
+            <h2 class="page-title mb-0">
                 <i class="fas fa-receipt me-2"></i>
                 Chi tiết đơn hàng #${dh.donHangId}
-            </h3>
+            </h2>
         </div>
 
-        <!-- Nội dung -->
+        <!-- ✅ RIGHT: ACTIONS -->
+        <div class="d-flex gap-2">
+            <a target="_blank"
+               href="${pageContext.request.contextPath}/admin/don-hang?action=print&id=${dh.donHangId}"
+               class="btn btn-primary fw-semibold">
+                <i class="fas fa-print me-1"></i> In hóa đơn
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- ✅ CARD -->
+    <div class="card card-wrapper">
         <div class="card-body p-4">
 
-            <!-- Thông tin khách + đơn -->
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <h5 class="text-primary"><i class="fas fa-user me-2"></i>Thông tin khách hàng</h5>
+            <!-- THÔNG TIN KHÁCH + ĐƠN -->
+            <div class="row mb-4">
+
+                <div class="col-md-6">
+                    <h6 class="text-primary fw-bold mb-2">
+                        <i class="fas fa-user me-1"></i> Thông tin khách hàng
+                    </h6>
                     <p><strong>Khách hàng:</strong> ${dh.hoTenKhach} (ID: ${dh.khachHangId})</p>
                     <p><strong>Địa chỉ giao:</strong> ${dh.diaChiGiao}</p>
                 </div>
 
-                <div class="col-md-6 mb-3">
-                    <h5 class="text-primary"><i class="fas fa-box me-2"></i>Thông tin đơn hàng</h5>
-                    <p><strong>Trạng thái:</strong>
+                <div class="col-md-6">
+                    <h6 class="text-primary fw-bold mb-2">
+                        <i class="fas fa-box me-1"></i> Thông tin đơn hàng
+                    </h6>
+
+                    <p>
+                        <strong>Trạng thái:</strong>
                         <c:choose>
                             <c:when test="${dh.trangThai == 'Hoàn tất'}">
                                 <span class="badge bg-success">Hoàn tất</span>
@@ -53,15 +133,22 @@
                             </c:otherwise>
                         </c:choose>
                     </p>
-                    <p><strong>Ngày đặt:</strong> 
-                        <fmt:formatDate value="${dh.ngayDat}" pattern="HH:mm 'ngày' dd/MM/yyyy"/>
+
+                    <p>
+                        <strong>Ngày đặt:</strong>
+                        <fmt:formatDate value="${dh.ngayDat}"
+                                        pattern="HH:mm 'ngày' dd/MM/yyyy"/>
                     </p>
-                    <p><strong>Phí vận chuyển:</strong> 
-                        <fmt:formatNumber value="${dh.phiVanChuyen}" type="number" pattern="#,##0 ₫"/>
+
+                    <p>
+                        <strong>Phí vận chuyển:</strong>
+                        <fmt:formatNumber value="${dh.phiVanChuyen}" pattern="#,##0 ₫"/>
                     </p>
-                    <p><strong>Tổng tiền:</strong> 
+
+                    <p>
+                        <strong>Tổng tiền:</strong>
                         <span class="fw-bold text-danger">
-                            <fmt:formatNumber value="${dh.tongTien}" type="number" pattern="#,##0 ₫"/>
+                            <fmt:formatNumber value="${dh.tongTien}" pattern="#,##0 ₫"/>
                         </span>
                     </p>
                 </div>
@@ -69,52 +156,51 @@
 
             <hr>
 
-            <!-- Danh sách sản phẩm -->
-            <h5 class="text-primary"><i class="fas fa-list-ul me-2"></i>Danh sách sản phẩm</h5>
+            <!-- DANH SÁCH SẢN PHẨM -->
+            <h6 class="text-primary fw-bold mb-3">
+                <i class="fas fa-list-ul me-1"></i> Danh sách sản phẩm
+            </h6>
 
-            <div class="table-responsive mt-3">
-                <table class="table table-bordered table-striped align-middle">
-                    <thead class="table-light">
-                        <tr class="text-center text-uppercase">
-                            <th style="width: 10%">ID SP</th>
-                            <th>Tên sản phẩm</th>
-                            <th style="width: 10%">Số lượng</th>
-                            <th style="width: 15%">Đơn giá</th>
-                            <th style="width: 15%">Thành tiền</th>
-                        </tr>
+            <div class="table-responsive">
+                <table class="table table-bordered align-middle">
+                    <thead class="table-light text-center">
+                    <tr>
+                        <th width="80">ID SP</th>
+                        <th>Tên sản phẩm</th>
+                        <th width="100">Số lượng</th>
+                        <th width="130">Đơn giá</th>
+                        <th width="150">Thành tiền</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        <c:if test="${empty listSanPham}">
-                            <tr>
-                                <td colspan="5" class="text-center text-muted py-3">
-                                    Không có sản phẩm nào trong đơn hàng này.
-                                </td>
-                            </tr>
-                        </c:if>
 
-                        <c:forEach var="item" items="${listSanPham}">
-                            <tr>
-                                <td class="text-center">
-                                    <fmt:formatNumber value="${item.SanPhamId}" type="number" maxFractionDigits="0"/>
-                                </td>
-                                <td>${item.TenSanPham}</td>
-                                <td class="text-center"> <fmt:formatNumber value="${item.SoLuong}" type="number" maxFractionDigits="0"/></td>
-                                <td class="text-end">
-                                    <fmt:formatNumber value="${item.GiaBan}" type="number" pattern="#,##0 ₫"/>
-                                </td>
-                                <td class="text-end fw-bold text-danger">
-                                    <fmt:formatNumber value="${item.SoLuong * item.GiaBan}" type="number" pattern="#,##0 ₫"/>
-                                </td>
-                            </tr>
-                        </c:forEach>
+                    <c:forEach var="item" items="${listSanPham}">
+                        <tr>
+                            <td class="text-center">
+                                <fmt:formatNumber value="${item.SanPhamId}" maxFractionDigits="0"/>
+                            </td>
+                            <td>${item.TenSanPham}</td>
+                            <td class="text-center">
+                                <fmt:formatNumber value="${item.SoLuong}" maxFractionDigits="0"/>
+                            </td>
+                            <td class="text-end">
+                                <fmt:formatNumber value="${item.GiaBan}" pattern="#,##0 ₫"/>
+                            </td>
+                            <td class="text-end fw-bold text-danger">
+                                <fmt:formatNumber value="${item.SoLuong * item.GiaBan}" pattern="#,##0 ₫"/>
+                            </td>
+                        </tr>
+                    </c:forEach>
+
                     </tbody>
                 </table>
             </div>
 
-            <!-- Nút quay lại -->
+            <!-- BACK -->
             <div class="mt-4">
-                <a href="${pageContext.request.contextPath}/admin/don-hang" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left me-2"></i>Quay lại danh sách
+                <a href="${pageContext.request.contextPath}/admin/don-hang"
+                   class="btn btn-outline-primary fw-semibold">
+                    <i class="fas fa-arrow-left me-1"></i> Quay lại danh sách
                 </a>
             </div>
 

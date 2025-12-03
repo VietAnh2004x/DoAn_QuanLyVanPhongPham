@@ -2,228 +2,221 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
-<html>
-    <head>
-        <title>Quản lý đơn hàng</title>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin | Quản lý đơn hàng</title>
 
-        <!-- Bootstrap -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-        <!-- Icons -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            background: #f3f4f6;
+            font-family: Inter, system-ui, sans-serif;
+            font-size: 13px;
+            color: #1f2937;
+            margin: 0;
+        }
 
-        <style>
-            body {
-                background: #f3f4f6;
-                font-family: "Inter", sans-serif;
-            }
+        /* ✅ KHỚP VỚI SIDEBAR 220px */
+        .content-wrapper {
+            margin-left: 220px;
+            padding: 20px 24px;
+            max-width: calc(100vw - 220px);
+        }
 
-            /* MAIN CONTENT SHIFT */
-            .main-content {
-                margin-left: 250px;
-                padding: 2rem;
-            }
+        .page-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2563eb;
+        }
 
-            /* PAGE TITLE */
-            .page-title {
-                font-size: 26px;
-                font-weight: 700;
-                color: #2563eb;
-            }
+        /* SEARCH */
+        .search-box {
+            background: #fff;
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 12px rgba(0,0,0,.04);
+            margin-bottom: 16px;
+        }
 
-            /* SEARCH BOX */
-            .search-box {
-                background: white;
-                padding: 20px;
-                border-radius: 16px;
-                border: 1px solid #e5e7eb;
-                box-shadow: 0 6px 20px rgba(0,0,0,0.05);
-                margin-bottom: 20px;
-            }
-            .search-box input {
-                border-radius: 10px;
-                border: 1px solid #cbd5e1;
-            }
-            .search-box button {
-                border-radius: 10px;
-                background: #2563eb;
-                border: none;
-                padding: 10px 18px;
-                font-weight: 600;
-                color: white;
-            }
-            .search-box button:hover {
-                background: #1d4ed8;
-            }
+        /* TABLE WRAPPER */
+        .section-wrapper {
+            background: #fff;
+            padding: 16px;
+            border-radius: 14px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 6px 16px rgba(0,0,0,.05);
+        }
 
-            .btn-refresh {
-                border-radius: 10px;
-                font-weight: 600;
-                background: #6b7280;
-                color: white;
-                padding: 10px 18px;
-            }
-            .btn-refresh:hover {
-                background: #4b5563;
-            }
+        table {
+            font-size: 12.5px;
+            table-layout: fixed;
+        }
 
-            /* WRAPPER */
-            .section-wrapper {
-                background: white;
-                border-radius: 16px;
-                padding: 24px;
-                border: 1px solid #e5e7eb;
-                box-shadow: 0 6px 20px rgba(0,0,0,0.06);
-            }
+        table thead {
+            background: #2563eb;
+            color: #fff;
+        }
 
-            /* TABLE */
-            table thead {
-                background: #2563eb;
-                color: white;
-            }
-            table tbody tr:hover {
-                background: #eff6ff;
-            }
+        table th, table td {
+            padding: 8px;
+            vertical-align: middle;
+        }
 
-            /* STATUS BADGES */
-            .status-select {
-                font-weight: 600;
-                border-radius: 10px !important;
-                text-align: center;
-            }
+        table tbody tr:hover {
+            background: #eff6ff;
+        }
 
-            /* BUTTON VIEW */
-            .btn-view {
-                background: #3b82f6;
-                border: none;
-                padding: 6px 12px;
-                color: white;
-                border-radius: 8px;
-                font-size: 0.85rem;
-            }
-            .btn-view:hover {
-                background: #1d4ed8;
-            }
-        </style>
-    </head>
+        /* TEXT */
+        td.address {
+            white-space: normal;
+            word-break: break-word;
+        }
 
-    <body>
+        /* STATUS */
+        .status-select {
+            font-size: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
 
-        <!-- SIDEBAR -->
-        <jsp:include page="/view/admin-layout.jsp"/>
+        /* VIEW BTN */
+        .btn-view {
+            background: #3b82f6;
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            text-decoration: none;
+        }
 
-        <!-- MAIN -->
-        <div class="main-content">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="page-title m-0">
-                    <i class="fas fa-receipt me-2"></i> Danh sách đơn hàng
-                </h2>  
+        .btn-view:hover {
+            background: #1d4ed8;
+            color: #fff;
+        }
+    </style>
+</head>
 
-                <a href="${pageContext.request.contextPath}/export-excel?type=order" 
-                   class="btn btn-success fw-bold px-3 py-2"
-                   style="border-radius: 10px;">
-                    <i class="fa fa-file-excel-o me-1"></i> Xuất Excel
-                </a>
+<body>
+
+<!-- SIDEBAR -->
+<jsp:include page="/view/admin-layout.jsp"/>
+
+<!-- CONTENT -->
+<div class="content-wrapper">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="page-title">
+            <i class="fas fa-receipt me-2"></i>Quản lý đơn hàng
+        </h2>
+
+        <a href="${pageContext.request.contextPath}/export-excel?type=order"
+           class="btn btn-success btn-sm fw-bold">
+            <i class="fas fa-file-excel"></i> Xuất Excel
+        </a>
+    </div>
+
+    <!-- SEARCH -->
+    <form method="get"
+          action="${pageContext.request.contextPath}/admin/don-hang"
+          class="search-box">
+
+        <div class="row g-2">
+            <div class="col-md-9">
+                <input type="text"
+                       name="keyword"
+                       class="form-control form-control-sm"
+                       placeholder="Tìm theo ID, khách hàng, trạng thái..."
+                       value="${param.keyword}">
             </div>
 
-
-            <!-- SEARCH BOX -->
-            <form action="${pageContext.request.contextPath}/admin/don-hang"
-                  method="get" class="search-box d-flex">
-
-                <input type="text" name="keyword"
-                       class="form-control me-3"
-                       placeholder="🔍 Tìm theo ID, tên khách, trạng thái..."
-                       value="${param.keyword}"/>
-
-                <button type="submit">
-                    <i class="fas fa-search me-1"></i> Tìm
+            <div class="col-md-2">
+                <button class="btn btn-primary btn-sm w-100 fw-bold">
+                    <i class="fas fa-search"></i> Tìm
                 </button>
+            </div>
 
+            <div class="col-md-1">
                 <a href="${pageContext.request.contextPath}/admin/don-hang"
-                   class="btn-refresh ms-2">
-                    <i class="fas fa-sync-alt me-1"></i> Làm mới
+                   class="btn btn-secondary btn-sm w-100">
+                    ⟳
                 </a>
-            </form>
-
-            <!-- SECTION WRAPPER -->
-            <div class="section-wrapper">
-
-                <c:if test="${not empty error}">
-                    <div class="alert alert-danger">${error}</div>
-                </c:if>
-
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover align-middle">
-                        <thead class="text-center">
-                            <tr>
-                                <th>ID</th>
-                                <th>Khách hàng</th>
-                                <th>Ngày đặt</th>
-                                <th>Địa chỉ giao</th>
-                                <th>Phí vận chuyển</th>
-                                <th>Tổng tiền</th>
-                                <th>Trạng thái</th>
-                                <th>Thao tác</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <c:forEach var="dh" items="${list}">
-                                <tr>
-                                    <td class="text-center fw-bold">${dh.donHangId}</td>
-
-                                    <td>${dh.hoTenKhach}</td>
-
-                                    <td class="text-center">
-                                        <fmt:formatDate value="${dh.ngayDat}" pattern="dd/MM/yyyy HH:mm"/>
-                                    </td>
-
-                                    <td>${dh.diaChiGiao}</td>
-
-                                    <td class="text-end text-secondary">
-                                        <fmt:formatNumber value="${dh.phiVanChuyen}" type="number"/> ₫
-                                    </td>
-
-                                    <td class="text-end fw-bold text-danger">
-                                        <fmt:formatNumber value="${dh.tongTien}" type="number"/> ₫
-                                    </td>
-
-                                    <td class="text-center">
-                                        <form method="post">
-                                            <input type="hidden" name="donHangId" value="${dh.donHangId}"/>
-
-                                            <select name="trangThai"
-                                                    class="form-select form-select-sm status-select"
-                                                    onchange="this.form.submit()">
-
-                                                <option value="Chờ xử lý" ${dh.trangThai == 'Chờ xử lý' ? 'selected' : ''}>🕒 Chờ xử lý</option>
-                                                <option value="Đang giao" ${dh.trangThai == 'Đang giao' ? 'selected' : ''}>🚚 Đang giao</option>
-                                                <option value="Hoàn tất" ${dh.trangThai == 'Hoàn tất' ? 'selected' : ''}>✅ Hoàn tất</option>
-                                                <option value="Đã hủy" ${dh.trangThai == 'Đã hủy' ? 'selected' : ''}>❌ Đã hủy</option>
-
-                                            </select>
-                                        </form>
-                                    </td>
-
-                                    <td class="text-center">
-                                        <a href="${pageContext.request.contextPath}/admin/don-hang?action=view&id=${dh.donHangId}"
-                                           class="btn-view">
-                                            <i class="fas fa-eye"></i> Xem
-                                        </a>
-                                    </td>
-                                </tr>
-                            </c:forEach>
-                        </tbody>
-                    </table>
-                </div>
-
-                <c:if test="${empty list}">
-                    <div class="alert alert-info text-center mt-3">
-                        Không có đơn hàng nào.
-                    </div>
-                </c:if>
             </div>
         </div>
-    </body>
+    </form>
+
+    <!-- TABLE -->
+    <div class="section-wrapper">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="text-center">
+                <tr>
+                    <th style="width:65px">ID</th>
+                    <th style="width:150px">Khách</th>
+                    <th style="width:120px">Ngày đặt</th>
+                    <th>Địa chỉ giao</th>
+                    <th style="width:90px">Phí VC</th>
+                    <th style="width:110px">Tổng tiền</th>
+                    <th style="width:115px">Trạng thái</th>
+                    <th style="width:90px">Thao tác</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <c:if test="${empty list}">
+                    <tr>
+                        <td colspan="8" class="text-center text-muted py-3">
+                            Không có đơn hàng
+                        </td>
+                    </tr>
+                </c:if>
+
+                <c:forEach var="dh" items="${list}">
+                    <tr>
+                        <td class="text-center fw-bold">${dh.donHangId}</td>
+                        <td>${dh.hoTenKhach}</td>
+                        <td class="text-center">
+                            <fmt:formatDate value="${dh.ngayDat}" pattern="dd/MM/yyyy HH:mm"/>
+                        </td>
+                        <td class="address">${dh.diaChiGiao}</td>
+                        <td class="text-end">
+                            <fmt:formatNumber value="${dh.phiVanChuyen}" groupingUsed="true"/> ₫
+                        </td>
+                        <td class="text-end fw-bold text-danger">
+                            <fmt:formatNumber value="${dh.tongTien}" groupingUsed="true"/> ₫
+                        </td>
+                        <td class="text-center">
+                            <form method="post">
+                                <input type="hidden" name="donHangId" value="${dh.donHangId}">
+                                <select name="trangThai"
+                                        class="form-select form-select-sm status-select"
+                                        onchange="this.form.submit()">
+                                    <option value="Chờ xử lý" ${dh.trangThai=='Chờ xử lý'?'selected':''}>🕒Chờ xử lý</option>
+                                    <option value="Đang giao" ${dh.trangThai=='Đang giao'?'selected':''}>🚚Đang giao</option>
+                                    <option value="Hoàn tất" ${dh.trangThai=='Hoàn tất'?'selected':''}>✅Hoàn tất</option>
+                                    <option value="Đã hủy" ${dh.trangThai=='Đã hủy'?'selected':''}>❌Hủy</option>
+                                </select>
+                            </form>
+                        </td>
+                        <td class="text-center">
+                            <a class="btn-view"
+                               href="${pageContext.request.contextPath}/admin/don-hang?action=view&id=${dh.donHangId}">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
 </html>
