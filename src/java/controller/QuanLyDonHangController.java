@@ -12,6 +12,7 @@ import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import dao.ThanhToanDAO;
 
 import model.DonHang;
 import model.NguoiDung;
@@ -158,7 +159,6 @@ public class QuanLyDonHangController extends HttpServlet {
         }
     }
 
-    // ================= POST (CẬP NHẬT TRẠNG THÁI) =================
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -166,7 +166,16 @@ public class QuanLyDonHangController extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("donHangId"));
         String trangThai = request.getParameter("trangThai");
 
+        // ✅ Update trạng thái
         dao.updateTrangThai(id, trangThai);
+
+        // ✅ CHỈ TRỪ KHO KHI ĐƠN = "Hoàn tất"
+        if ("Hoàn tất".equals(trangThai)) {
+            ThanhToanDAO ttDao = new ThanhToanDAO();
+            ttDao.capNhatTonKhoTheoDonHang(id);
+        }
+
         response.sendRedirect(request.getContextPath() + "/admin/don-hang");
     }
+
 }

@@ -10,8 +10,10 @@
     <title>Admin | Quản lý đơn hàng</title>
 
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
         body {
@@ -22,7 +24,7 @@
             margin: 0;
         }
 
-        /* ✅ KHỚP VỚI SIDEBAR 220px */
+        /* ✅ KHỚP SIDEBAR 220px */
         .content-wrapper {
             margin-left: 220px;
             padding: 20px 24px;
@@ -35,7 +37,6 @@
             color: #2563eb;
         }
 
-        /* SEARCH */
         .search-box {
             background: #fff;
             padding: 14px;
@@ -45,7 +46,6 @@
             margin-bottom: 16px;
         }
 
-        /* TABLE WRAPPER */
         .section-wrapper {
             background: #fff;
             padding: 16px;
@@ -73,20 +73,17 @@
             background: #eff6ff;
         }
 
-        /* TEXT */
         td.address {
             white-space: normal;
             word-break: break-word;
         }
 
-        /* STATUS */
         .status-select {
             font-size: 12px;
             border-radius: 8px;
             font-weight: 600;
         }
 
-        /* VIEW BTN */
         .btn-view {
             background: #3b82f6;
             color: #fff;
@@ -162,7 +159,6 @@
                     <th style="width:150px">Khách</th>
                     <th style="width:120px">Ngày đặt</th>
                     <th>Địa chỉ giao</th>
-                    <th style="width:90px">Phí VC</th>
                     <th style="width:110px">Tổng tiền</th>
                     <th style="width:115px">Trạng thái</th>
                     <th style="width:90px">Thao tác</th>
@@ -172,7 +168,8 @@
                 <tbody>
                 <c:if test="${empty list}">
                     <tr>
-                        <td colspan="8" class="text-center text-muted py-3">
+                        <td colspan="7"
+                            class="text-center text-muted py-3">
                             Không có đơn hàng
                         </td>
                     </tr>
@@ -181,30 +178,36 @@
                 <c:forEach var="dh" items="${list}">
                     <tr>
                         <td class="text-center fw-bold">${dh.donHangId}</td>
+
                         <td>${dh.hoTenKhach}</td>
+
                         <td class="text-center">
-                            <fmt:formatDate value="${dh.ngayDat}" pattern="dd/MM/yyyy HH:mm"/>
+                            <fmt:formatDate value="${dh.ngayDat}"
+                                            pattern="dd/MM/yyyy HH:mm"/>
                         </td>
+
                         <td class="address">${dh.diaChiGiao}</td>
-                        <td class="text-end">
-                            <fmt:formatNumber value="${dh.phiVanChuyen}" groupingUsed="true"/> ₫
-                        </td>
+
                         <td class="text-end fw-bold text-danger">
-                            <fmt:formatNumber value="${dh.tongTien}" groupingUsed="true"/> ₫
+                            <fmt:formatNumber value="${dh.tongTien}"
+                                              groupingUsed="true"/> ₫
                         </td>
+
                         <td class="text-center">
                             <form method="post">
-                                <input type="hidden" name="donHangId" value="${dh.donHangId}">
+                                <input type="hidden" name="donHangId"
+                                       value="${dh.donHangId}">
                                 <select name="trangThai"
                                         class="form-select form-select-sm status-select"
                                         onchange="this.form.submit()">
-                                    <option value="Chờ xử lý" ${dh.trangThai=='Chờ xử lý'?'selected':''}>🕒Chờ xử lý</option>
-                                    <option value="Đang giao" ${dh.trangThai=='Đang giao'?'selected':''}>🚚Đang giao</option>
-                                    <option value="Hoàn tất" ${dh.trangThai=='Hoàn tất'?'selected':''}>✅Hoàn tất</option>
-                                    <option value="Đã hủy" ${dh.trangThai=='Đã hủy'?'selected':''}>❌Hủy</option>
+                                    <option value="Chờ xử lý" ${dh.trangThai=='Chờ xử lý'?'selected':''}>🕒 Chờ xử lý</option>
+                                    <option value="Đang giao" ${dh.trangThai=='Đang giao'?'selected':''}>🚚 Đang giao</option>
+                                    <option value="Hoàn tất" ${dh.trangThai=='Hoàn tất'?'selected':''}>✅ Hoàn tất</option>
+                                    <option value="Đã hủy" ${dh.trangThai=='Đã hủy'?'selected':''}>❌ Đã hủy</option>
                                 </select>
                             </form>
                         </td>
+
                         <td class="text-center">
                             <a class="btn-view"
                                href="${pageContext.request.contextPath}/admin/don-hang?action=view&id=${dh.donHangId}">
@@ -218,5 +221,6 @@
         </div>
     </div>
 </div>
+
 </body>
 </html>
