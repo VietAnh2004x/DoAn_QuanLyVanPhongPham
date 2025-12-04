@@ -14,6 +14,7 @@ public class DonHang {
 
     // ✅ THÊM DÒNG NÀY - chỉ để hiển thị tên khách
     private String hoTenKhach;
+    private String soDienThoai;
 
     public DonHang() {}
 
@@ -58,4 +59,8 @@ public class DonHang {
     // ✅ Thêm getter/setter cho biến tạm này
     public String getHoTenKhach() { return hoTenKhach; }
     public void setHoTenKhach(String hoTenKhach) { this.hoTenKhach = hoTenKhach; }
+
+    public String getSoDienThoai() {return soDienThoai; }
+
+    public void setSoDienThoai(String soDienThoai) { this.soDienThoai = soDienThoai; }
 }

@@ -102,8 +102,12 @@ public class QuanLySanPhamController extends HttpServlet {
 
             default:
                 String keyword = request.getParameter("keyword");
-                int loaiId = request.getParameter("loaiId") != null ? Integer.parseInt(request.getParameter("loaiId")) : 0;
-
+                if (keyword == null) keyword = "";
+                int loaiId = 0;
+                try {
+                    loaiId = Integer.parseInt(request.getParameter("loaiId"));
+                } catch (Exception ignored) {
+}
                 List<SanPham> list = spDAO.search(keyword, loaiId);
                 request.setAttribute("list", list);
                 request.setAttribute("dsLoai", loaiDAO.getAll());

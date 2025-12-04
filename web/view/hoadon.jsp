@@ -48,6 +48,17 @@
             font-weight: 800;
         }
 
+        .customer-box {
+            border: 1px solid #000;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            background: #fafafa;
+        }
+
+        .customer-box div {
+            line-height: 1.6;
+        }
+
         table th, table td {
             border: 1px solid #000 !important;
             padding: 10px;
@@ -96,7 +107,7 @@
 
 <body>
 
-<!-- ===== TẠO MÃ ĐƠN HÀNG SHOPEE STYLE ===== -->
+<!-- ===== TẠO MÃ ĐƠN HÀNG ===== -->
 <c:set var="orderDate">
     <fmt:formatDate value="${dh.ngayDat}" pattern="yyMMdd"/>
 </c:set>
@@ -120,16 +131,18 @@
     </div>
 
     <!-- ===== THÔNG TIN KHÁCH ===== -->
-    <div class="row mb-4">
-        <div class="col-md-6">
-            <strong>Khách hàng:</strong> ${dh.hoTenKhach}<br>
-            <strong>ID khách:</strong> ${dh.khachHangId}<br>
-            <strong>Địa chỉ giao:</strong> ${dh.diaChiGiao}
-        </div>
-        <div class="col-md-6 text-end">
-            <strong>Trạng thái:</strong> ${dh.trangThai}<br>
-            <strong>Phí vận chuyển:</strong>
-            <fmt:formatNumber value="${dh.phiVanChuyen}" pattern="#,##0 ₫"/>
+    <div class="customer-box">
+        <div class="row">
+            <div class="col-md-6">
+                <strong>Khách hàng:</strong> ${dh.hoTenKhach}<br>
+                <strong>SĐT:</strong> ${dh.soDienThoai}
+            </div>
+
+            <div class="col-md-6 text-end"></div>
+
+            <div class="col-12 mt-2">
+                <strong>Địa chỉ giao hàng:</strong> ${dh.diaChiGiao}
+            </div>
         </div>
     </div>
 

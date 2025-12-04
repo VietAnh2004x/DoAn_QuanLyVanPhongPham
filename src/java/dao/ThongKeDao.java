@@ -7,7 +7,7 @@ import java.util.*;
 import dao.DBConnection;
 
 public class ThongKeDao {
-    // 🧭 Doanh thu theo từng tháng (12 tháng gần nhất)
+    //  Doanh thu theo từng tháng (12 tháng gần nhất)
     public Map<String, Double> getDoanhThuTheoThang() {
         Map<String, Double> data = new LinkedHashMap<>();
         String sql = """

@@ -134,19 +134,19 @@ public class SanPhamDAO {
         return sp;
     }
     
-    // === ⭐️ HÀM MỚI ĐỂ TÌM KIẾM/LỌC TRONG ADMIN ⭐️ ===
+    // ️ HÀM MỚI ĐỂ TÌM KIẾM LỌC TRONG ADMIN ️ ===
     public List<SanPham> search(String keyword, int loaiId) {
         List<SanPham> list = new ArrayList<>();
         
         // Dùng "WHERE 1=1" là mẹo để dễ dàng nối các vế AND
         String sql = "SELECT * FROM SanPham WHERE 1=1";
         
-        // 1. Thêm điều kiện Tên (LIKE) nếu có
+        // Thêm điều kiện Tên (LIKE) nếu có
         if (keyword != null && !keyword.trim().isEmpty()) {
             sql += " AND tenSanPham LIKE ?";
         }
         
-        // 2. Thêm điều kiện Lọc (loaiId) nếu có (loaiId = 0 là "Tất cả")
+        //  Thêm điều kiện Lọc (loaiId) nếu có (loaiId = 0 là "Tất cả")
         if (loaiId > 0) { 
             sql += " AND loaiId = ?"; // Tên cột trong DB là loaiId
         }
@@ -156,7 +156,7 @@ public class SanPhamDAO {
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             
-            // 3. Set tham số theo đúng thứ tự đã thêm vào SQL
+            //  Set tham số theo đúng thứ tự đã thêm vào SQL
             int paramIndex = 1; // Biến đếm vị trí tham số
             
             if (keyword != null && !keyword.trim().isEmpty()) {
@@ -168,7 +168,7 @@ public class SanPhamDAO {
                 ps.setInt(paramIndex, loaiId);
             }
 
-            // 4. Thực thi và Map kết quả
+            //  Thực thi và Map kết quả
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 SanPham sp = new SanPham(
@@ -192,7 +192,7 @@ public class SanPhamDAO {
         
         return list;
     }
-    // === ⭐️ KẾT THÚC HÀM MỚI ⭐️ ===
+  
 
 
     // Lấy danh sách sản phẩm Flash Sale (ví dụ 5 sản phẩm)
@@ -301,7 +301,7 @@ public class SanPhamDAO {
             }
 
         } catch (Exception e) {
-            e.printStackTrace(); // Sửa lại: thêm e.printStackTrace()
+            e.printStackTrace(); 
         }
 
         // 3. Sắp xếp danh sách trong JAVA (dùng sp.getGiaKhuyenMai())
@@ -309,7 +309,7 @@ public class SanPhamDAO {
             sortMode = "popular";
         }
         
-        // (Sử dụng cú pháp lambda cho gọn)
+        
         switch (sortMode) {
             case "price_asc": // Giá tăng dần (theo giá khuyến mãi)
                 list.sort(Comparator.comparingDouble(SanPham::getGiaKhuyenMai));
@@ -322,7 +322,7 @@ public class SanPhamDAO {
                 break;
             case "popular": // Phổ biến
             default:
-                // (Bạn có thể đổi logic "popular" nếu muốn, ví dụ theo tồn kho)
+                // 
                 break;
         }
 
@@ -376,7 +376,7 @@ public class SanPhamDAO {
     public ArrayList<SanPham> getSanPhamByFilterAndSort(Integer loaiId, Double minGia, Double maxGia, String sortMode) {
         ArrayList<SanPham> list = new ArrayList<>();
 
-        // 1. Xây dựng câu SQL động một cách AN TOÀN
+        //  Xây dựng câu SQL động một cách AN TOÀN
         StringBuilder sql = new StringBuilder("SELECT * FROM SanPham WHERE 1=1");
         List<Object> params = new ArrayList<>(); // Danh sách để chứa các tham số ?
 
@@ -385,7 +385,7 @@ public class SanPhamDAO {
             params.add(loaiId);
         }
 
-        // LƯU Ý: Lọc theo GIÁ GỐC (sp.getGiaBan())
+        // Lọc theo GIÁ GỐC (sp.getGiaBan())
         // Nếu bạn muốn lọc theo GIÁ KHUYẾN MÃI (sp.getGiaKhuyenMai()),
         // logic này phải được thực hiện trong Java (sau khi lấy list)
         if (minGia != null) {
@@ -397,11 +397,10 @@ public class SanPhamDAO {
             params.add(maxGia);
         }
 
-        // (Tạm thời bỏ ORDER BY trong SQL để sắp xếp trong Java cho linh hoạt)
-        // sql.append(" ORDER BY giaBan ASC");
+        
         try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql.toString())) {
 
-            // 2. Gán các tham số vào câu lệnh an toàn
+            //  Gán các tham số vào câu lệnh an toàn
             for (int i = 0; i < params.size(); i++) {
                 ps.setObject(i + 1, params.get(i));
             }
@@ -409,7 +408,7 @@ public class SanPhamDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                // (Bạn phải đảm bảo constructor này đúng với Model SanPham của bạn)
+                // 
                 list.add(new SanPham(
                         rs.getInt("sanPhamId"),
                         rs.getString("tenSanPham"),
@@ -425,11 +424,11 @@ public class SanPhamDAO {
             }
 
         } catch (Exception e) {
-            e.printStackTrace(); // Sửa lại: thêm e.printStackTrace()
+            e.printStackTrace(); 
         }
 
-        // 3. (MỚI) Sắp xếp danh sách trong JAVA
-        // (Sao chép logic từ DanhMucSanPham.java vào đây)
+        //  Sắp xếp danh sách trong JAVA
+        
         if (sortMode == null) {
             sortMode = "popular";
         }
@@ -444,7 +443,7 @@ public class SanPhamDAO {
             case "newest": // Mới nhất (theo ID)
                 Collections.sort(list, Comparator.comparingInt(SanPham::getSanPhamId).reversed());
                 break;
-            case "popular": // Phổ biến (ví dụ: theo tồn kho)
+            case "popular": // Phổ biến ( theo tồn kho)
             default:
                 Collections.sort(list, Comparator.comparingInt(SanPham::getTonKho).reversed());
                 break;
