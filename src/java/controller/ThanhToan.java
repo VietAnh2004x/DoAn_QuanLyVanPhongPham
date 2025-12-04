@@ -175,7 +175,17 @@ public class ThanhToan extends HttpServlet {
             try {
                 int userId = user.getNguoiDungId();
                 double tongTien = Double.parseDouble(tongTienStr);
-                String diaChiGiao = request.getParameter("diaChiGiao");
+                
+                String diaChi = request.getParameter("diaChiGiao");
+                String tinhThanh = request.getParameter("province");
+                String quanHuyen = request.getParameter("district");
+                String phuongXa = request.getParameter("ward");
+                
+                String diaChiDayDu = diaChi
+                    + (phuongXa != null ? " - " + phuongXa : "")
+                    + (quanHuyen != null ? " - " + quanHuyen : "")
+                    + (tinhThanh != null ? " - " + tinhThanh : "");
+                
                 String phuongThuc = request.getParameter("phuongThuc");
                 boolean isBuyNow = Boolean.parseBoolean(request.getParameter("isBuyNow"));
 
@@ -210,7 +220,7 @@ public class ThanhToan extends HttpServlet {
                 model.DonHang donHang = new model.DonHang();
                 donHang.setKhachHangId(userId);
                 donHang.setTongTien(tongTien);
-                donHang.setDiaChiGiao(diaChiGiao);
+                donHang.setDiaChiGiao(diaChiDayDu);
                 donHang.setPhiVanChuyen(0);
                 donHang.setTrangThai("Chờ xác nhận");
                 donHang.setDanhSachSanPham(danhSachSP.toString());

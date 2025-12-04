@@ -8,13 +8,16 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import model.SanPham;
 
 @MultipartConfig(
-    fileSizeThreshold = 1024 * 1024,       // 1MB
-    maxFileSize = 1024 * 1024 * 5,         // 5MB
-    maxRequestSize = 1024 * 1024 * 10      // 10MB
+        fileSizeThreshold = 1024 * 1024,
+        maxFileSize = 1024 * 1024 * 5,
+        maxRequestSize = 1024 * 1024 * 10
 )
 @WebServlet("/admin/san-pham")
 public class QuanLySanPhamController extends HttpServlet {
@@ -22,6 +25,33 @@ public class QuanLySanPhamController extends HttpServlet {
     private final SanPhamDAO spDAO = new SanPhamDAO();
     private final LoaiSanPhamDAO loaiDAO = new LoaiSanPhamDAO();
     private final NhaCungCapDAO nccDAO = new NhaCungCapDAO();
+
+    private String getAutoUploadPath() {
+        String[] drives = {"D:", "E:", "C:"};
+
+        for (String d : drives) {
+            File dir = new File(d + "/DoAn_Uploads");
+            if (dir.exists() || dir.mkdirs()) {
+                return dir.getAbsolutePath();
+            }
+        }
+        throw new RuntimeException("Không tìm thấy ổ đĩa hợp lệ để lưu ảnh!");
+    }
+
+    private String getFolderName(int loaiId) {
+        switch (loaiId) {
+            case 1:
+                return "balo";
+            case 2:
+                return "but";
+            case 3:
+                return "vo";
+            case 4:
+                return "hopbut";
+            default:
+                return "khac";
+        }
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -37,65 +67,48 @@ public class QuanLySanPhamController extends HttpServlet {
         }
 
         String action = request.getParameter("action");
-        if (action == null || action.isEmpty()) action = "list";
+        if (action == null) {
+            action = "list";
+        }
 
-        try {
-            switch (action) {
-                case "new":
-                    request.setAttribute("dsLoai", loaiDAO.getAll());
-                    request.setAttribute("dsNCC", nccDAO.getAll());
-                    request.getRequestDispatcher("/view/sanpham-form.jsp").forward(request, response);
-                    break;
+        switch (action) {
+            case "new":
+                request.setAttribute("dsLoai", loaiDAO.getAll());
+                request.setAttribute("dsNCC", nccDAO.getAll());
+                request.getRequestDispatcher("/view/sanpham-form.jsp").forward(request, response);
+                break;
 
-                case "edit":
-                    int id = Integer.parseInt(request.getParameter("id"));
-                    SanPham sp = spDAO.getSanPhamById(id);
-                    if (sp == null) {
-                        request.setAttribute("error", "Không tìm thấy sản phẩm có ID = " + id);
-                        request.setAttribute("dsLoai", loaiDAO.getAll());
-                        request.setAttribute("list", spDAO.search(null, 0));
-                        request.getRequestDispatcher("/view/sanpham-list.jsp").forward(request, response);
-                        return;
-                    }
-                    request.setAttribute("sp", sp);
-                    request.setAttribute("dsLoai", loaiDAO.getAll());
-                    request.setAttribute("dsNCC", nccDAO.getAll());
-                    request.getRequestDispatcher("/view/sanpham-form.jsp").forward(request, response);
-                    break;
+            case "edit":
+                int id = Integer.parseInt(request.getParameter("id"));
+                SanPham sp = spDAO.getSanPhamById(id);
 
-                case "delete":
-                    int deleteId = Integer.parseInt(request.getParameter("id"));
-                    spDAO.delete(deleteId);
-                    response.sendRedirect(request.getContextPath() + "/admin/san-pham");
-                    break;
+                request.setAttribute("sp", sp);
+                request.setAttribute("dsLoai", loaiDAO.getAll());
+                request.setAttribute("dsNCC", nccDAO.getAll());
+                request.getRequestDispatcher("/view/sanpham-form.jsp").forward(request, response);
+                break;
 
-                default:
-                    String keyword = request.getParameter("keyword");
-                    String loaiIdStr = request.getParameter("loaiId");
-                    int loaiId = 0;
-                    if (loaiIdStr != null && !loaiIdStr.isEmpty()) {
-                        try {
-                            loaiId = Integer.parseInt(loaiIdStr);
-                        } catch (NumberFormatException e) {
-                            loaiId = 0;
-                        }
-                    }
+            case "delete":
+                String idRaw = request.getParameter("sanPhamId");
+                if (idRaw == null || idRaw.isEmpty()) {
+                    idRaw = request.getParameter("id");
+                }
 
-                    List<SanPham> list = spDAO.search(keyword, loaiId);
-                    request.setAttribute("list", list);
-                    request.setAttribute("dsLoai", loaiDAO.getAll());
-                    request.setAttribute("keyword", keyword);
-                    request.setAttribute("loaiId", loaiId);
+                int deleteId = Integer.parseInt(idRaw);
+                spDAO.delete(deleteId);
 
-                    request.getRequestDispatcher("/view/sanpham-list.jsp").forward(request, response);
-                    break;
-            }
+                response.sendRedirect(request.getContextPath() + "/admin/san-pham");
+                break;
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("error", "Lỗi khi xử lý: " + e.getMessage());
-            request.setAttribute("dsLoai", loaiDAO.getAll());
-            request.getRequestDispatcher("/view/sanpham-list.jsp").forward(request, response);
+            default:
+                String keyword = request.getParameter("keyword");
+                int loaiId = request.getParameter("loaiId") != null ? Integer.parseInt(request.getParameter("loaiId")) : 0;
+
+                List<SanPham> list = spDAO.search(keyword, loaiId);
+                request.setAttribute("list", list);
+                request.setAttribute("dsLoai", loaiDAO.getAll());
+                request.getRequestDispatcher("/view/sanpham-list.jsp").forward(request, response);
+                break;
         }
     }
 
@@ -106,81 +119,70 @@ public class QuanLySanPhamController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         int id = 0;
-        String idParam = request.getParameter("sanPhamId");
-        if (idParam != null && !idParam.isEmpty()) {
-            try {
-                id = Integer.parseInt(idParam);
-            } catch (NumberFormatException e) {
-                id = 0;
-            }
+        try {
+            id = Integer.parseInt(request.getParameter("sanPhamId"));
+        } catch (Exception ignored) {
         }
 
         String ten = request.getParameter("tenSanPham");
-        double giaNhap = 0, giaBan = 0;
-        int tonKho = 0;
-        try {
-            giaNhap = Double.parseDouble(request.getParameter("giaNhap"));
-            giaBan = Double.parseDouble(request.getParameter("giaBan"));
-            tonKho = Integer.parseInt(request.getParameter("tonKho"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        double giaNhap = Double.parseDouble(request.getParameter("giaNhap"));
+        double giaBan = Double.parseDouble(request.getParameter("giaBan"));
+        int tonKho = Integer.parseInt(request.getParameter("tonKho"));
         String moTa = request.getParameter("moTa");
         String trangThai = request.getParameter("trangThai");
         int loaiId = Integer.parseInt(request.getParameter("loaiId"));
         int nhaCungCapId = Integer.parseInt(request.getParameter("nhaCungCapId"));
 
-        // ===============================
-        // XỬ LÝ UPLOAD ẢNH TRÊN Ổ E
-        // ===============================
-        Part filePart = request.getPart("hinhAnhFile");
+        // ===== LẤY TÊN FOLDER THEO LOẠI =====
+        String folderLoai = getFolderName(loaiId); // balo/but/hopbut/...
 
-        // 🧱 Lưu ảnh vào thư mục cố định trên ổ E
-        String uploadPath = "E:\\DoAn_Uploads";
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdirs();
+        // ===== THƯ MỤC THẬT TRONG WEB APP =====
+        String realPath = request.getServletContext().getRealPath("/assets/image/" + folderLoai);
+
+        File uploadFolder = new File(realPath);
+        if (!uploadFolder.exists()) {
+            uploadFolder.mkdirs();
         }
 
-        System.out.println("[DEBUG] Thư mục upload ảnh: " + uploadPath);
+        Part filePart = request.getPart("hinhAnhFile");
 
         String hinhAnh = null;
+
+        // Nếu update → giữ ảnh cũ
         if (id > 0) {
-            SanPham existing = spDAO.getSanPhamById(id);
-            if (existing != null) {
-                hinhAnh = existing.getHinhAnh();
+            SanPham spOld = spDAO.getSanPhamById(id);
+            if (spOld != null) {
+                hinhAnh = spOld.getHinhAnh();
             }
         }
 
-        // ✳️ Nếu người dùng upload ảnh mới
+        // Nếu upload ảnh mới
         if (filePart != null && filePart.getSize() > 0) {
-            String fileName = new File(filePart.getSubmittedFileName()).getName();
 
-            // ✅ Lưu file thật vào E:\DoAn_Uploads
-            String fileSavePath = uploadPath + File.separator + fileName;
-            filePart.write(fileSavePath);
+            String fileName = System.currentTimeMillis() + "_" + filePart.getSubmittedFileName();
 
-            // ✅ Đường dẫn hiển thị trên web
-            hinhAnh = request.getContextPath() + "/uploads/" + fileName;
+            File savedFile = new File(uploadFolder, fileName);
+
+            try (InputStream input = filePart.getInputStream()) {
+                Files.copy(input, savedFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            }
+
+            // 👉 ĐƯỜNG DẪN CHUẨN ĐỂ JSP LOAD ĐƯỢC
+            hinhAnh = "/assets/image/" + folderLoai + "/" + fileName;
         }
 
-        // ✳️ Nếu không có ảnh, dùng ảnh mặc định
-        if (hinhAnh == null || hinhAnh.isEmpty()) {
-            hinhAnh = request.getContextPath() + "/assets/upload/no-image.jpg";
+        if (hinhAnh == null) {
+            hinhAnh = "/assets/upload/no-image.jpg";
         }
 
-        // ===============================
-        // LƯU DỮ LIỆU VÀO DATABASE
-        // ===============================
-        SanPham sp = new SanPham(
-                id, ten, loaiId, nhaCungCapId, moTa,
-                giaNhap, giaBan, tonKho, hinhAnh,
-                (trangThai != null && !trangThai.isEmpty()) ? trangThai : "Đang bán"
-        );
+        SanPham sp = new SanPham(id, ten, loaiId, nhaCungCapId, moTa,
+                giaNhap, giaBan, tonKho, hinhAnh, trangThai);
 
-        boolean success = (id > 0) ? spDAO.update(sp) : spDAO.insert(sp);
-        System.out.println("[DEBUG] ✅ " + (id > 0 ? "Cập nhật" : "Thêm mới") + " sản phẩm: " + success);
+        if (id > 0) {
+            spDAO.update(sp);
+        } else {
+            spDAO.insert(sp);
+        }
 
         response.sendRedirect(request.getContextPath() + "/admin/san-pham");
     }

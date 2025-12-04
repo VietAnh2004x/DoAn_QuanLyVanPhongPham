@@ -1,59 +1,56 @@
 document.addEventListener("DOMContentLoaded", function () {
+
     const provinceSelect = document.querySelector("#provinceSelect");
     const districtSelect = document.querySelector("#districtSelect");
     const wardSelect = document.querySelector("#wardSelect");
 
     let provincesData = [];
 
-    // Load dữ liệu từ JSON nội bộ
-    fetch(`${window.location.origin}${window.location.pathname.split('/')[1] ? '/' + window.location.pathname.split('/')[1] : ''}/assets/data/provinces.json`)
+    // ===== LOAD 63 TỈNH =====
+    fetch(`${location.origin}/${location.pathname.split('/')[1]}/assets/data/provinces.json`)
         .then(res => res.json())
         .then(data => {
             provincesData = data;
-            provinceSelect.innerHTML = '<option value="" disabled selected>Tỉnh / thành</option>';
-            data.forEach(province => {
-                const option = document.createElement("option");
-                option.value = province.code;
-                option.textContent = province.name;
-                provinceSelect.appendChild(option);
-            });
-        })
-        .catch(err => console.error("Lỗi khi load file JSON:", err));
 
-    // Khi chọn Tỉnh -> hiển thị Huyện
-    provinceSelect.addEventListener("change", function () {
-        const provinceCode = parseInt(this.value);
-        districtSelect.innerHTML = '<option selected disabled>Quận / huyện</option>';
-        wardSelect.innerHTML = '<option selected disabled>Phường / xã</option>';
-
-        const selectedProvince = provincesData.find(p => p.code === provinceCode);
-        if (selectedProvince) {
-            selectedProvince.districts.forEach(d => {
-                const option = document.createElement("option");
-                option.value = d.code;
-                option.textContent = d.name;
-                districtSelect.appendChild(option);
-            });
-        }
-    });
-
-    // Khi chọn Huyện -> hiển thị Xã
-    districtSelect.addEventListener("change", function () {
-        const districtCode = parseInt(this.value);
-        wardSelect.innerHTML = '<option selected disabled>Phường / xã</option>';
-
-        // Tìm huyện trong toàn bộ dữ liệu
-        provincesData.forEach(p => {
-            p.districts.forEach(d => {
-                if (d.code === districtCode) {
-                    d.wards.forEach(w => {
-                        const option = document.createElement("option");
-                        option.value = w.code;
-                        option.textContent = w.name;
-                        wardSelect.appendChild(option);
-                    });
-                }
+            provinceSelect.innerHTML = `<option value="" disabled selected>Tỉnh / thành</option>`;
+            data.forEach(p => {
+                provinceSelect.innerHTML += `<option value="${p.name}">${p.name}</option>`;
             });
         });
+
+    // ===== CHỌN TỈNH → HUYỆN =====
+    provinceSelect.addEventListener("change", function () {
+
+        const provinceName = this.value;
+        districtSelect.innerHTML = `<option value="" disabled selected>Quận / huyện</option>`;
+        wardSelect.innerHTML = `<option value="" disabled selected>Phường / xã</option>`;
+
+        const province = provincesData.find(p => p.name === provinceName);
+        if (!province) return;
+
+        province.districts.forEach(d => {
+            districtSelect.innerHTML += `<option value="${d.name}">${d.name}</option>`;
+        });
     });
+
+    // ===== CHỌN HUYỆN → XÃ =====
+    districtSelect.addEventListener("change", function () {
+
+        const districtName = this.value;
+        wardSelect.innerHTML = `<option value="" disabled selected>Phường / xã</option>`;
+
+        let selectedDistrict = null;
+
+        for (const p of provincesData) {
+            selectedDistrict = p.districts.find(d => d.name === districtName);
+            if (selectedDistrict) break;
+        }
+
+        if (!selectedDistrict) return;
+
+        selectedDistrict.wards.forEach(w => {
+            wardSelect.innerHTML += `<option value="${w.name}">${w.name}</option>`;
+        });
+    });
+
 });

@@ -213,8 +213,11 @@
                         <td>
                             <a href="${pageContext.request.contextPath}/admin/san-pham?action=edit&id=${sp.sanPhamId}"
                                class="btn-action btn-edit">Sửa</a>
-                            <a onclick="return confirm('Xóa sản phẩm này?')"
-                               class="btn-action btn-delete">Xóa</a>
+                            <a href="${pageContext.request.contextPath}/admin/san-pham?action=delete&sanPhamId=${sp.sanPhamId}"
+                                onclick="return confirm('Bạn chắc chắn muốn xóa sản phẩm này?');"
+                                class="btn-action btn-delete">
+                                 Xóa
+                             </a>
                         </td>
                     </tr>
                 </c:forEach>

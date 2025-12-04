@@ -13,9 +13,7 @@ public class LoaiSanPhamDAO {
         // Tên bảng là LoaiSanPham (đúng theo DB của bạn)
         String sql = "SELECT * FROM LoaiSanPham ORDER BY TenLoai ASC"; // Sắp xếp theo tên
 
-        try (Connection conn = DBConnection.getConnection(); 
-             PreparedStatement ps = conn.prepareStatement(sql); 
-             ResultSet rs = ps.executeQuery()) {
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 // Giả sử Model LoaiSanPham của bạn có constructor (int, String, String)
@@ -39,8 +37,7 @@ public class LoaiSanPhamDAO {
         // ⭐️ SỬA LẠI TÊN CỘT (viết hoa)
         String sql = "INSERT INTO LoaiSanPham (TenLoai, MoTa) VALUES (?, ?)";
 
-        try (Connection conn = DBConnection.getConnection(); 
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, lsp.getTenLoai());
             ps.setString(2, lsp.getMoTa());
@@ -59,8 +56,7 @@ public class LoaiSanPhamDAO {
         // ⭐️ SỬA LẠI TÊN CỘT (viết hoa)
         String sql = "UPDATE LoaiSanPham SET TenLoai = ?, MoTa = ? WHERE LoaiId = ?";
 
-        try (Connection conn = DBConnection.getConnection(); 
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, lsp.getTenLoai());
             ps.setString(2, lsp.getMoTa());
@@ -80,8 +76,7 @@ public class LoaiSanPhamDAO {
         // ⭐️ SỬA LẠI TÊN CỘT (viết hoa)
         String sql = "DELETE FROM LoaiSanPham WHERE LoaiId = ?";
 
-        try (Connection conn = DBConnection.getConnection(); 
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
@@ -99,8 +94,7 @@ public class LoaiSanPhamDAO {
         String sql = "SELECT * FROM LoaiSanPham WHERE LoaiId = ?";
         LoaiSanPham loai = null;
 
-        try (Connection conn = DBConnection.getConnection(); 
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, loaiId);
             ResultSet rs = ps.executeQuery();
@@ -125,8 +119,7 @@ public class LoaiSanPhamDAO {
         // ⭐️ SỬA LẠI TÊN CỘT (viết hoa)
         String sql = "SELECT * FROM LoaiSanPham WHERE TenLoai LIKE ?";
 
-        try (Connection conn = DBConnection.getConnection(); 
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, "%" + keyword + "%");
             ResultSet rs = ps.executeQuery();
@@ -139,9 +132,27 @@ public class LoaiSanPhamDAO {
                 ));
             }
 
-        } catch (Exception e) { 
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return list;
+    }
+
+    public String getFolderByLoaiId(int loaiId) {
+        String sql = "SELECT folder FROM LoaiSanPham WHERE loaiId = ?";
+
+        try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, loaiId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getString("folder");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

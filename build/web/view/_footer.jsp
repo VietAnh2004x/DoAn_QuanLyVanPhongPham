@@ -20,10 +20,10 @@
                 <p><a href="#!">Trần Văn Huy</a></p>
             </div>
             <div class="col-md-3 col-lg-2 col-xl-2 mx-auto">
-                <h6 class="text-uppercase fw-bold mb-4">Lớp</h6>
-                <p><a href="#!">DHTI16A1CL</a></p>
-                <p><a href="#!">DHTI16A1CL</a></p>
-                <p><a href="#!">DHTI16A1CL</a></p>
+                <h6 class="text-uppercase fw-bold mb-4">Mã sinh viên</h6>
+                <p><a href="#!">22103100045</a></p>
+                <p><a href="#!">22103100181</a></p>
+                <p><a href="#!">22103100319</a></p>
             </div>
             <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0">
                 <h6 class="text-uppercase fw-bold mb-4">Email</h6>
