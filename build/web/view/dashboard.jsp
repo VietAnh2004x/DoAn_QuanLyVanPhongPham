@@ -1,267 +1,248 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Dashboard | Văn Phòng Phẩm</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard | Văn Phòng Phẩm 3AE</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
     <style>
-        body { background-color: #f8f9fa; }
-
-        /* Sidebar */
-        .sidebar {
-            position: fixed;
-            top: 0; left: 0;
-            height: 100vh;
-            width: 250px;
-            background-color: #343a40;
-            color: white;
-            padding-top: 1.5rem;
+        body {
+            margin: 0;
+            background: #f3f4f6;
+            font-family: Inter, system-ui, sans-serif;
+            font-size: 13px;
+            color: #1f2937;
         }
-        .sidebar .nav-link {
-            color: #adb5bd;
-            font-size: 1.1rem;
-            padding: 0.75rem 1.5rem;
-        }
-        .sidebar .nav-link:hover, .sidebar .nav-link.active {
-            color: #fff;
-            background-color: #495057;
-        }
-        .sidebar .nav-link .bi { margin-right: 12px; }
 
-        .main-content { margin-left: 250px; padding: 2rem; }
+        /* ✅ KHỚP SIDEBAR 220px */
+        .main-content {
+            margin-left: 220px;
+            padding: 20px 24px;
+            max-width: calc(100vw - 220px);
+        }
 
+        .page-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2563eb;
+            margin-bottom: 20px;
+        }
+
+        /* STAT CARD */
         .stat-card {
-            border: none; border-radius: 0.75rem;
-            transition: transform 0.2s ease-in-out;
+            border-radius: 14px;
+            border: none;
+            transition: .25s;
         }
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15)!important;
-        }
-        .stat-card .card-body {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .stat-card-icon { font-size: 3rem; opacity: 0.7; }
 
-        .sidebar .bottom-buttons {
-            margin-top: auto;
-            padding: 1rem;
-            text-align: center;
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0,0,0,.15);
         }
-        .sidebar .bottom-buttons a {
-            display: block;
-            margin-bottom: 0.5rem;
+
+        .stat-card h6 {
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .stat-card h2,
+        .stat-card h4 {
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .stat-card-icon {
+            font-size: 34px;
+            opacity: .65;
+        }
+
+        /* CARD */
+        .card {
+            border-radius: 14px;
+        }
+
+        .card-header {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        table {
+            font-size: 12.5px;
         }
     </style>
 </head>
+
 <body>
 
-<!-- Sidebar -->
-<div class="sidebar d-flex flex-column p-3">
-    <h4 class="text-center mb-4">Admin Dashboard</h4>
-    <hr class="text-secondary">
-    <ul class="nav nav-pills flex-column mb-auto">
-        <li class="nav-item">
-            <a href="${pageContext.request.contextPath}/admin" class="nav-link active">
-                <i class="bi bi-speedometer2"></i> Bảng điều khiển
-            </a>
-        </li>
-        <li>
-            <a href="${pageContext.request.contextPath}/admin/san-pham" class="nav-link">
-                <i class="bi bi-box-seam"></i> Quản lý sản phẩm
-            </a>
-        </li>
-        <li>
-            <a href="${pageContext.request.contextPath}/admin/nguoi-dung" class="nav-link">
-                <i class="bi bi-people"></i> Quản lý người dùng
-            </a>
-        </li>
-        <li>
-            <a href="${pageContext.request.contextPath}/admin/don-hang" class="nav-link">
-                <i class="bi bi-receipt"></i> Quản lý đơn hàng
-            </a>
-        </li>
-    </ul>
+<!-- SIDEBAR -->
+<jsp:include page="/view/admin-layout.jsp"/>
 
-    <hr>
-    <div class="bottom-buttons mt-auto">
-        <a href="${pageContext.request.contextPath}/Home" class="btn btn-outline-light w-100 mb-2">
-            <i class="bi bi-house-door"></i> Trang chủ
-        </a>
-        <a href="${pageContext.request.contextPath}/dang-xuat" class="btn btn-danger w-100">
-            <i class="bi bi-box-arrow-right"></i> Đăng xuất
-        </a>
-        <div class="text-center text-muted small mt-3">
-            Văn Phòng Phẩm 3AE
+<!-- DASHBOARD CONTENT -->
+<div class="main-content">
+
+    <h2 class="page-title">
+        <i class="bi bi-speedometer2 me-2"></i>Bảng điều khiển quản trị
+    </h2>
+
+    <!-- STAT BOX -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card stat-card bg-success text-white shadow-sm">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6>Sản phẩm</h6>
+                        <h2>${tongSP}</h2>
+                    </div>
+                    <i class="bi bi-box-seam stat-card-icon"></i>
+                </div>
+            </div>
         </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card stat-card bg-info text-white shadow-sm">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6>Khách hàng</h6>
+                        <h2>${tongKH}</h2>
+                    </div>
+                    <i class="bi bi-people stat-card-icon"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card stat-card bg-warning text-dark shadow-sm">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6>Đơn hàng</h6>
+                        <h2>${tongDH}</h2>
+                    </div>
+                    <i class="bi bi-cart-check stat-card-icon"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card stat-card bg-danger text-white shadow-sm">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6>Doanh thu</h6>
+                        <h4>
+                            <fmt:formatNumber value="${doanhThu}" groupingUsed="true"/> ₫
+                        </h4>
+                    </div>
+                    <i class="bi bi-cash-coin stat-card-icon"></i>
+                </div>
+            </div>
+        </div>
+
     </div>
+
+    <!-- CHART + TOP -->
+    <div class="row g-4">
+
+        <!-- CHART -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-primary text-white">
+                    <i class="bi bi-bar-chart-line me-2"></i>Doanh thu theo tháng
+                </div>
+                <div class="card-body">
+                    <canvas id="chartDoanhThu" height="120"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- TOP PRODUCT -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-success text-white">
+                    <i class="bi bi-trophy me-2"></i>Top 5 sản phẩm bán chạy
+                </div>
+
+                <div class="card-body p-2">
+                    <c:if test="${empty topSanPham}">
+                        <p class="text-center text-muted mt-3">Chưa có dữ liệu</p>
+                    </c:if>
+
+                    <c:if test="${not empty topSanPham}">
+                        <table class="table table-sm table-bordered text-center align-middle">
+                            <thead class="table-light">
+                            <tr>
+                                <th>#</th>
+                                <th>Sản phẩm</th>
+                                <th>Đã bán</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach var="sp" items="${topSanPham}" varStatus="i">
+                                <tr>
+                                    <td>${i.index + 1}</td>
+                                    <td>${sp.tenSanPham}</td>
+                                    <td>
+                                        <span class="badge bg-primary">${sp.soLuongBan}</span>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                    </c:if>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
 </div>
 
-<!-- Main -->
-<main class="main-content">
-    <div class="container-fluid">
-        <h2 class="mb-4 text-primary">Bảng điều khiển quản trị</h2>
-
-        <!-- Thống kê nhanh -->
-        <div class="row g-4 mb-5">
-            <div class="col-lg-3 col-md-6">
-                <div class="card stat-card shadow-sm bg-success text-white">
-                    <div class="card-body">
-                        <div>
-                            <h5>Sản phẩm</h5>
-                            <h2 class="fw-bold">${tongSP}</h2>
-                        </div>
-                        <i class="bi bi-box-seam stat-card-icon"></i>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-                <div class="card stat-card shadow-sm bg-info text-white">
-                    <div class="card-body">
-                        <div>
-                            <h5>Khách hàng</h5>
-                            <h2 class="fw-bold">${tongKH}</h2>
-                        </div>
-                        <i class="bi bi-people stat-card-icon"></i>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-                <div class="card stat-card shadow-sm bg-warning text-dark">
-                    <div class="card-body">
-                        <div>
-                            <h5>Đơn hàng</h5>
-                            <h2 class="fw-bold">${tongDH}</h2>
-                        </div>
-                        <i class="bi bi-cart-check stat-card-icon"></i>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-3 col-md-6">
-                <div class="card stat-card shadow-sm bg-danger text-white">
-                    <div class="card-body">
-                        <div>
-                            <h5>Doanh thu</h5>
-                            <h3 class="fw-bold">
-                                <fmt:formatNumber value="${doanhThu}" type="number" groupingUsed="true"/> ₫
-                            </h3>
-                        </div>
-                        <i class="bi bi-cash-coin stat-card-icon"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Biểu đồ & Top sản phẩm -->
-        <div class="row">
-            <!-- Biểu đồ -->
-            <div class="col-md-8">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-primary text-white fw-bold">
-                        <i class="bi bi-bar-chart-line me-2"></i> Biểu đồ doanh thu theo tháng
-                    </div>
-                    <div class="card-body" style="height: 360px;">
-                        <canvas id="chartDoanhThu"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Top 5 sản phẩm -->
-            <div class="col-md-4">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-success text-white fw-bold">
-                        <i class="bi bi-trophy me-2"></i> Top 5 sản phẩm bán chạy
-                    </div>
-                    <div class="card-body">
-                        <c:if test="${empty topSanPham}">
-                            <p class="text-center text-muted">Chưa có dữ liệu thống kê.</p>
-                        </c:if>
-                        <c:if test="${not empty topSanPham}">
-                            <table class="table table-sm table-bordered align-middle text-center">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Tên sản phẩm</th>
-                                        <th>Đã bán</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <c:forEach var="sp" items="${topSanPham}" varStatus="loop">
-                                        <tr>
-                                            <td>${loop.index + 1}</td>
-                                            <td>${sp.tenSanPham}</td>
-                                            <td><span class="badge bg-primary">${sp.soLuongBan}</span></td>
-                                        </tr>
-                                    </c:forEach>
-                                </tbody>
-                            </table>
-                        </c:if>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</main>
-
-<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+
 <script>
 const ctx = document.getElementById('chartDoanhThu');
 const labels = [<c:forEach var="k" items="${doanhThuThang.keySet()}">'${k}',</c:forEach>];
 const values = [<c:forEach var="v" items="${doanhThuThang.values()}">${v},</c:forEach>];
 
-// Gradient màu xanh
-const gradient = ctx.getContext('2d').createLinearGradient(0, 0, 0, 400);
-gradient.addColorStop(0, '#007bff');
-gradient.addColorStop(1, '#80bdff');
-
 new Chart(ctx, {
-  type: 'bar',
-  data: {
-    labels: labels,
-    datasets: [{
-      label: 'Doanh thu (VNĐ)',
-      data: values,
-      backgroundColor: gradient,
-      borderRadius: 10,
-      hoverBackgroundColor: '#0056b3'
-    }]
-  },
-  options: {
-    responsive: true,
-    plugins: {
-      legend: { display: false },
-      datalabels: {
-        anchor: 'end', align: 'top', color: '#000',
-        font: { weight: 'bold' },
-        formatter: (v) => v.toLocaleString('vi-VN')
-      }
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [{
+            data: values,
+            backgroundColor: '#3b82f6',
+            borderRadius: 8
+        }]
     },
-    scales: {
-      y: {
-        beginAtZero: true,
-        ticks: {
-          callback: (v) => v.toLocaleString('vi-VN') + ' ₫',
-          color: '#555'
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false },
+            datalabels: {
+                anchor: 'end',
+                align: 'top',
+                formatter: v => v.toLocaleString('vi-VN')
+            }
         },
-        grid: { color: '#e9ecef' }
-      },
-      x: { grid: { display: false }, ticks: { color: '#333' } }
-    }
-  },
-  plugins: [ChartDataLabels]
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    callback: v => v.toLocaleString('vi-VN') + ' ₫'
+                }
+            }
+        }
+    },
+    plugins: [ChartDataLabels]
 });
 </script>
 </body>

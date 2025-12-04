@@ -232,16 +232,7 @@ public class ThanhToan extends HttpServlet {
 
                 thanhToanDAO.insert(tt);
 
-                // ✅ GIẢM TỒN KHO (thêm mới, không đổi cấu trúc cũ)
-                for (ChiTietGioHang ct : cartItems) {
-                    SanPham sp = ct.getSanPham();
-                    int soLuongBan = ct.getSoLuong();
-                    int tonKhoMoi = sp.getTonKho() - soLuongBan;
-                    if (tonKhoMoi < 0) tonKhoMoi = 0;
-
-                    spDao.updateTonKho(sp.getSanPhamId(), tonKhoMoi);
-                    System.out.println("[DEBUG] 🔻 Giảm tồn kho SP #" + sp.getSanPhamId() + " còn lại: " + tonKhoMoi);
-                }
+               
 
                 if (!isBuyNow) gioHangDAO.clearByNguoiDung(userId);
 

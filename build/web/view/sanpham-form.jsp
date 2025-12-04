@@ -1,114 +1,212 @@
-<%@page contentType="text/html;charset=UTF-8" language="java"%>
+<%@page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<html>
+<!DOCTYPE html>
+<html lang="vi">
 <head>
-    <title><c:choose>
-        <c:when test="${sp != null}">Cập nhật sản phẩm</c:when>
-        <c:otherwise>Thêm sản phẩm mới</c:otherwise>
-    </c:choose></title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-</head>
-<body class="p-4 bg-light">
-<div class="container mt-4">
-    <h3 class="fw-bold mb-4">
+    <meta charset="UTF-8">
+    <title>
         <c:choose>
             <c:when test="${sp != null}">Cập nhật sản phẩm</c:when>
             <c:otherwise>Thêm sản phẩm mới</c:otherwise>
         </c:choose>
-    </h3>
+    </title>
 
-    <form action="${pageContext.request.contextPath}/admin/san-pham"
-          method="post" enctype="multipart/form-data"
-          class="border rounded shadow-sm bg-white p-4">
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
 
-        <input type="hidden" name="sanPhamId" value="${sp.sanPhamId}" />
+    <style>
+        body {
+            background: #f3f4f6;
+            font-family: Inter, system-ui, sans-serif;
+        }
 
-        <!-- Tên sản phẩm -->
-        <div class="mb-3">
-            <label class="form-label fw-bold">Tên sản phẩm</label>
-            <input name="tenSanPham" value="${sp.tenSanPham}" required class="form-control" />
-        </div>
+        /* ✅ ĐỒNG BỘ SIDEBAR 220px */
+        .main-content {
+            margin-left: 220px;
+            padding: 24px 28px;
+            max-width: calc(100vw - 220px);
+        }
 
-        <!-- Giá nhập -->
-        <div class="mb-3">
-            <label class="form-label fw-bold">Giá nhập</label>
-            <input name="giaNhap" value="${sp.giaNhap}" required type="number" step="100" class="form-control" />
-        </div>
+        .page-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2563eb;
+        }
 
-        <!-- Giá bán -->
-        <div class="mb-3">
-            <label class="form-label fw-bold">Giá bán</label>
-            <input name="giaBan" value="${sp.giaBan}" required type="number" step="100" class="form-control" />
-        </div>
+        .card-form {
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0,0,0,.04);
+        }
+    </style>
+</head>
 
-        <!-- Tồn kho -->
-        <div class="mb-3">
-            <label class="form-label fw-bold">Tồn kho</label>
-            <input name="tonKho" value="${sp.tonKho}" required type="number" class="form-control" />
-        </div>
+<body>
 
-        <!-- Loại sản phẩm -->
-        <div class="mb-3">
-            <label class="form-label fw-bold">Loại sản phẩm</label>
-            <select name="loaiId" class="form-select" required>
-                <option value="">-- Chọn loại --</option>
-                <c:forEach var="l" items="${dsLoai}">
-                    <option value="${l.loaiId}"
-                        <c:if test="${sp != null && sp.loaiId == l.loaiId}">selected</c:if>>
-                        ${l.tenLoai}
-                    </option>
-                </c:forEach>
-            </select>
-        </div>
+<!-- ✅ SIDEBAR -->
+<jsp:include page="/view/admin-layout.jsp"/>
 
-        <!-- Nhà cung cấp -->
-        <div class="mb-3">
-            <label class="form-label fw-bold">Nhà cung cấp</label>
-            <select name="nhaCungCapId" class="form-select" required>
-                <option value="">-- Chọn nhà cung cấp --</option>
-                <c:forEach var="n" items="${dsNCC}">
-                    <option value="${n.nhaCungCapId}"
-                        <c:if test="${sp != null && sp.nhaCungCapId == n.nhaCungCapId}">selected</c:if>>
-                        ${n.tenNhaCungCap}
-                    </option>
-                </c:forEach>
-            </select>
-        </div>
+<!-- ✅ MAIN -->
+<div class="main-content">
 
-        <div class="mb-3">
-            <label class="form-label fw-bold">Hình ảnh sản phẩm</label>
-            <input type="file" name="hinhAnhFile" class="form-control" accept="image/*" />
-            <c:if test="${sp != null && sp.hinhAnh != null}">
-                <div class="mt-2">
-                    <img src="${pageContext.request.contextPath}${sp.hinhAnh}" 
-                         alt="Ảnh sản phẩm" style="max-width: 150px; border-radius: 6px;">
+    <!-- ✅ BREADCRUMB -->
+    <nav class="mb-3">
+        <a href="${pageContext.request.contextPath}/admin/san-pham"
+           class="text-decoration-none text-primary fw-semibold">
+            ← Quản lý sản phẩm
+        </a>
+        <span class="text-muted"> / </span>
+        <span class="text-muted">
+            <c:choose>
+                <c:when test="${sp != null}">Cập nhật</c:when>
+                <c:otherwise>Thêm mới</c:otherwise>
+            </c:choose>
+        </span>
+    </nav>
+
+    <!-- ✅ TITLE -->
+    <h2 class="page-title mb-4">
+        <c:choose>
+            <c:when test="${sp != null}">✏️ Cập nhật sản phẩm</c:when>
+            <c:otherwise>➕ Thêm sản phẩm mới</c:otherwise>
+        </c:choose>
+    </h2>
+
+    <!-- ✅ FORM -->
+    <div class="card card-form">
+        <div class="card-body p-4">
+
+            <form action="${pageContext.request.contextPath}/admin/san-pham"
+                  method="post"
+                  enctype="multipart/form-data">
+
+                <input type="hidden" name="sanPhamId" value="${sp.sanPhamId}" />
+
+                <div class="row g-3">
+
+                    <!-- TÊN -->
+                    <div class="col-md-12">
+                        <label class="form-label fw-semibold">Tên sản phẩm</label>
+                        <input name="tenSanPham"
+                               value="${sp.tenSanPham}"
+                               required
+                               class="form-control">
+                    </div>
+
+                    <!-- GIÁ NHẬP -->
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Giá nhập</label>
+                        <input name="giaNhap"
+                               value="${sp.giaNhap}"
+                               type="number"
+                               step="100"
+                               required
+                               class="form-control">
+                    </div>
+
+                    <!-- GIÁ BÁN -->
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Giá bán</label>
+                        <input name="giaBan"
+                               value="${sp.giaBan}"
+                               type="number"
+                               step="100"
+                               required
+                               class="form-control">
+                    </div>
+
+                    <!-- TỒN -->
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Tồn kho</label>
+                        <input name="tonKho"
+                               value="${sp.tonKho}"
+                               type="number"
+                               required
+                               class="form-control">
+                    </div>
+
+                    <!-- LOẠI -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Loại sản phẩm</label>
+                        <select name="loaiId" class="form-select" required>
+                            <option value="">-- Chọn loại --</option>
+                            <c:forEach var="l" items="${dsLoai}">
+                                <option value="${l.loaiId}"
+                                        <c:if test="${sp != null && sp.loaiId == l.loaiId}">selected</c:if>>
+                                    ${l.tenLoai}
+                                </option>
+                            </c:forEach>
+                        </select>
+                    </div>
+
+                    <!-- NCC -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Nhà cung cấp</label>
+                        <select name="nhaCungCapId" class="form-select" required>
+                            <option value="">-- Chọn NCC --</option>
+                            <c:forEach var="n" items="${dsNCC}">
+                                <option value="${n.nhaCungCapId}"
+                                        <c:if test="${sp != null && sp.nhaCungCapId == n.nhaCungCapId}">selected</c:if>>
+                                    ${n.tenNhaCungCap}
+                                </option>
+                            </c:forEach>
+                        </select>
+                    </div>
+
+                    <!-- HÌNH -->
+                    <div class="col-md-12">
+                        <label class="form-label fw-semibold">Hình ảnh</label>
+                        <input type="file"
+                               name="hinhAnhFile"
+                               accept="image/*"
+                               class="form-control">
+                        <c:if test="${sp != null && sp.hinhAnh != null}">
+                            <img src="${pageContext.request.contextPath}${sp.hinhAnh}"
+                                 class="mt-2 rounded"
+                                 style="max-width:140px">
+                        </c:if>
+                    </div>
+
+                    <!-- MÔ TẢ -->
+                    <div class="col-md-12">
+                        <label class="form-label fw-semibold">Mô tả</label>
+                        <textarea name="moTa"
+                                  rows="3"
+                                  class="form-control">${sp.moTa}</textarea>
+                    </div>
+
+                    <!-- TRẠNG THÁI -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Trạng thái</label>
+                        <select name="trangThai" class="form-select">
+                            <option value="Đang bán"
+                                    <c:if test="${sp.trangThai=='Đang bán'}">selected</c:if>>Đang bán</option>
+                            <option value="Ngừng bán"
+                                    <c:if test="${sp.trangThai=='Ngừng bán'}">selected</c:if>>Ngừng bán</option>
+                            <option value="Hết hàng"
+                                    <c:if test="${sp.trangThai=='Hết hàng'}">selected</c:if>>Hết hàng</option>
+                        </select>
+                    </div>
                 </div>
-            </c:if>
-        </div>
 
+                <!-- ACTION -->
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="submit" class="btn btn-success px-4 fw-semibold">
+                        💾 Lưu
+                    </button>
 
-        <div class="mb-3">
-            <label class="form-label fw-bold">Mô tả</label>
-            <textarea name="moTa" class="form-control" rows="3">${sp.moTa}</textarea>
-        </div>
+                    <!-- ✅ BACK CÁCH 1 -->
+                    <a href="${pageContext.request.contextPath}/admin/san-pham"
+                       class="btn btn-outline-secondary px-4">
+                        ↩ Quay lại
+                    </a>
+                </div>
+            </form>
 
-        <div class="mb-3">
-            <label class="form-label fw-bold">Trạng thái</label>
-            <select name="trangThai" class="form-select">
-                <option value="Đang bán"
-                    <c:if test="${sp != null && sp.trangThai == 'Đang bán'}">selected</c:if>>Đang bán</option>
-                <option value="Ngừng bán"
-                    <c:if test="${sp != null && sp.trangThai == 'Ngừng bán'}">selected</c:if>>Ngừng bán</option>
-                <option value="Hết hàng"
-                    <c:if test="${sp != null && sp.trangThai == 'Hết hàng'}">selected</c:if>>Hết hàng</option>
-            </select>
         </div>
-        <div class="d-flex justify-content-between mt-4">
-            <button type="submit" class="btn btn-success px-4">Lưu</button>
-            <a href="${pageContext.request.contextPath}/admin/san-pham" class="btn btn-secondary px-4">Hủy</a>
-        </div>
-    </form>
+    </div>
 </div>
 </body>
 </html>
